@@ -19,6 +19,8 @@ router.post('/many', courseController.importManyCourses)
 
 router.get('/:id/content', courseController.getCourseContent)
 
+router.post('/:id/review', courseController.reviewCourse)
+
 router.get('/:id', courseController.getCourseDetail)
 
 router.patch('/:id', courseController.updateCourse)

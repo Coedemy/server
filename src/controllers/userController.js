@@ -8,13 +8,18 @@ const { uploadFileToS3, getFileStreamFromS3 } = require("../services/upload")
 
 const getAllUsers = async (req, res) => {
   const users = await User.find()
-  res.json(users)
+  res.json({
+    total: users.length,
+    users
+  })
 }
 
 const getUser = async (req, res) => {
   const userId = req.params.id
   const user = await User.find({ _id: userId })
-  res.json(user?.[0])
+  res.json({
+    user: user?.[0]
+  })
 }
 
 const searchUserByUsername = async (req, res) => {
