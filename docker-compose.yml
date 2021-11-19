@@ -15,16 +15,22 @@ services:
     #         - ./WebApp:/app
     #         - /app/node_modules
     express_server:
-        image: express_server
-        ports:
-            - "5000:5000"
-        networks:
-            - mern-app
-        volumes:
-            - ./Server:/app
-            - /app/node_modules
-        depends_on:
-            - mongo
+      container_name: express_server
+      build:
+        context: .
+        dockerfile: Dockerfile
+      stdin_open: true
+      environment:
+          CHOKIDAR_USEPOLLING: "true"
+      ports:
+        - "5000:5000"
+      networks:
+        - mern-app
+      volumes:
+        - .:/app
+        - /app/node_modules
+      depends_on:
+        - mongo
     # migration:
     #     image: express_server
     #     depends_on:
@@ -36,15 +42,15 @@ services:
     #         - mern-app
     #     command: yarn seed:run
     mongo:
-        image: mongo:3.6.19-xenial
-        ports:
-            - "27017:27017"
-        networks:
-            - mern-app
+      image: mongo:3.6.19-xenial
+      ports:
+        - "27017:27017"
+      networks:
+        - mern-app
             
 networks:
-    mern-app:
-        driver: bridge  
+  mern-app:
+      driver: bridge  
 volumes:
   mongo-data:
     driver: local
