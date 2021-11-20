@@ -1,20 +1,22 @@
 <p>Create .env file and put these to it: </p>
 
-PORT=5000
-SYSTEM_URL=http://localhost:5000
+<ul>
+  <li>PORT=5000</li>
+  <li>SYSTEM_URL=http://localhost:5000</li>
 
-ACCESS_TOKEN_SECRET=accesssecret
-REFRESH_TOKEN_SECRET=refreshsecret
+  <li>ACCESS_TOKEN_SECRET=accesssecret</li>
+  <li>REFRESH_TOKEN_SECRET=refreshsecret</li>
 
-MONGO_USERNAME=
-MONGO_PASSWORD=
-MONGO_DATABASE=
-FACEBOOK_APP_ID=
-FACEBOOK_APP_SECRET=
+  <li>MONGO_USERNAME=</li>
+  <li>MONGO_PASSWORD=</li>
+  <li>MONGO_DATABASE=</li>
+  <li>FACEBOOK_APP_ID=</li>
+  <li>FACEBOOK_APP_SECRET=</li>
 
-AWS_BUCKET_NAME=
-AWS_BUCKET_REGION=
-AWS_BUCKET_ACCESS_KEY_ID=
-AWS_BUCKET_SECRET_ACCESS_KEY=
+  <li>AWS_BUCKET_NAME=</li>
+  <li>AWS_BUCKET_REGION=</li>
+  <li>AWS_BUCKET_ACCESS_KEY_ID=</li>
+  <li>AWS_BUCKET_SECRET_ACCESS_KEY=</li>
 
-AWS_SYSTEM_EMAIL=
+  <li>AWS_SYSTEM_EMAIL=</li>
+</ul>
