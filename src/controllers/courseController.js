@@ -9,23 +9,25 @@ const getCourseCategoriesList = async (req, res, next) => {
 
   res.json({
     total: courseCategoryList.length,
-    courseCategoryList: courseCategoryList.map(c => ({ ...c._doc, isDeleted: undefined }))
+    courseCategoryList: courseCategoryList.map(c => _.pick(c, 'title'))
   })
 }
 
 const getCoursesListByCategory = async (req, res, next) => {
   let courses = await Course.find().populate('category').populate('reviews')
-  courses = courses.map(c => {
-    if (c.reviews.length === 0) return {
-      ...c._doc, category: c._doc.category.title
-    }
+  courses = courses.map(c => ({
+    ...c._doc,
+    category: c._doc.category.title,
+    reviews: c._doc.reviews.map(review => _.pick(review, '_id', 'reply', 'numberOfStars', 'comment', 'reviewer'))
+  }))
 
-    return { ...c._doc, category: c._doc.category.title }
-  })
-
+  // res.json({
+  //   total: courses.length,
+  //   coursesByCategories: _.groupBy(courses.map(c => _.pick(c, '_id', 'reviews', 'title', 'averageRating', 'courseImage', 'promotionVideo', 'description', 'instructor', 'price', 'category')), 'category')
+  // })
   res.json({
     total: courses.length,
-    coursesByCategories: _.groupBy(courses.map(c => _.pick(c, '_id', 'reviews', 'title', 'averageRating', 'courseImage', 'promotionVideo', 'description', 'instructor', 'price', 'category')), 'category')
+    courses: courses.map(c => _.pick(c, '_id', 'reviews', 'title', 'averageRating', 'courseImage', 'promotionVideo', 'description', 'instructor', 'price', 'category'))
   })
 }
 
@@ -96,6 +98,20 @@ const importManyCourses = async (req, res, next) => {
   res.status(201).json({ total: importedDoc.length, newCourses: importedDoc })
 }
 
+const importManyCategories = async (req, res, next) => {
+  const importedCategories = req.body.categories
+  console.log({ importedCategories})
+  const importedCategoryDocs = []
+
+  for (let category of importedCategories) {
+    const { title } = category
+    const newCategory = await CourseCategory.create({ title })
+    importedCategoryDocs.push(newCategory)
+  }
+
+  res.status(201).json({ total: importedCategoryDocs.length, importedCategoryDocs })
+}
+
 const reviewCourse = async (req, res, next) => {
   const courseId = req.params.id
   const { numberOfStars, comment, reviewer } = req.body
@@ -121,5 +137,5 @@ module.exports = {
   getCourseCategoriesList, getCoursesListByCategory,
   getHighRatingCoursesList, getBestSellerCoursesList,
   getCourseDetail, getCourseContent, searchCourses, reviewCourse,
-  createCourse, updateCourse, removeCourse, importManyCourses
+  createCourse, updateCourse, removeCourse, importManyCourses, importManyCategories
 }

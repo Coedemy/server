@@ -5,6 +5,8 @@ const { courseController } = require('../controllers')
 
 router.get('/categories', courseController.getCourseCategoriesList)
 
+router.post('/categories', courseController.importManyCategories)
+
 router.get('/bestseller', courseController.getBestSellerCoursesList)
 
 router.get('/high-rating', courseController.getHighRatingCoursesList)

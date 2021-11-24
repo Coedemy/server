@@ -10,8 +10,6 @@ start:
 	@echo "========== Start running app =========="
 
 	docker-compose up
-
-	
 cleanup:
-	sudo docker-compose down
-	sudo docker rmi -f $$(docker images -a -q)
+	docker-compose down
+	docker rmi -f $$(docker images -a -q)
