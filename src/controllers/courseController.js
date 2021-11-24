@@ -1,7 +1,7 @@
 const _ = require('lodash')
 
 const { ObjectId } = require('mongodb')
-const { Course, CourseCategory, Review } = require('../schemas')
+const { Course, CourseCategory, Review, CourseSection, Lecture } = require('../schemas')
 // const { groupObjectByKey } = require('../utils/object')
 
 const getCourseCategoriesList = async (req, res, next) => {
@@ -21,10 +21,6 @@ const getCoursesListByCategory = async (req, res, next) => {
     reviews: c._doc.reviews.map(review => _.pick(review, '_id', 'reply', 'numberOfStars', 'comment', 'reviewer'))
   }))
 
-  // res.json({
-  //   total: courses.length,
-  //   coursesByCategories: _.groupBy(courses.map(c => _.pick(c, '_id', 'reviews', 'title', 'averageRating', 'courseImage', 'promotionVideo', 'description', 'instructor', 'price', 'category')), 'category')
-  // })
   res.json({
     total: courses.length,
     courses: courses.map(c => _.pick(c, '_id', 'reviews', 'title', 'averageRating', 'courseImage', 'promotionVideo', 'description', 'instructor', 'price', 'category'))
@@ -45,6 +41,22 @@ const getBestSellerCoursesList = async (req, res, next) => {
 const searchCourses = async (req, res, next) => {
 
   res.json('searchCourses')
+}
+
+const getCourseSections = async (req, res, next) => {
+  const sections = await CourseSection.find()
+  res.json({
+    total: sections.length,
+    sections
+  })
+}
+
+const getCourseLectures = async (req, res, next) => {
+  const lectures = await Lecture.find()
+  res.json({
+    total: lectures.length,
+    lectures
+  })
 }
 
 const getCourseDetail = async (req, res, next) => {
@@ -134,8 +146,8 @@ const removeCourse = async (req, res, next) => {
 }
 
 module.exports = {
-  getCourseCategoriesList, getCoursesListByCategory,
-  getHighRatingCoursesList, getBestSellerCoursesList,
+  getCourseCategoriesList, getCoursesListByCategory, getCourseSections,
+  getHighRatingCoursesList, getBestSellerCoursesList, getCourseLectures,
   getCourseDetail, getCourseContent, searchCourses, reviewCourse,
   createCourse, updateCourse, removeCourse, importManyCourses, importManyCategories
 }

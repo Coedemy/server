@@ -2,7 +2,6 @@ module.exports = {
   Address: require('./addressSchema'),
   Cart: require('./cartSchema'),
   CourseCategory: require('./courseCategorySchema'),
-  CourseContent: require('./courseContentScheme'),
   Course: require('./courseSchema'),
   CourseSection: require('./courseSectionSchema'),
   Image: require('./imageSchema'),

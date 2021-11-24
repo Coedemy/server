@@ -12,8 +12,8 @@ const Schema = mongoose.Schema
 
 const LectureContentSchema = new Schema({
   lectureContentType: { type: LectureContentType, defaultValue: LectureContentType.ARTICLE },
-  articleUrl: { type: String },
-  video: { type: Schema.Types.ObjectId, ref: 'videos' },
+  articleUrl: { type: String, default: '' },
+  videoUrl: { type: String, default: '' },
   quizesList: [{ type: Schema.Types.ObjectId, ref: 'quizes', default: [] }],
   isDeleted: { type: Boolean, default: false }
 }, { timestamps: true })

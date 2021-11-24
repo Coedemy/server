@@ -1,10 +1,10 @@
 const { connectToMongoDb, disconnectFromMongDb } = require('../services/database')
-const { seedCourseData } = require('./courseSeeder')
+const { seedCoursesData } = require('./courses/seedCoursesData')
 
 const startSeeding = async () => {
   await connectToMongoDb()
   console.log("Seeding................................")
-  await seedCourseData()
+  await seedCoursesData()
   await disconnectFromMongDb()
 }
 

@@ -20,7 +20,7 @@ const CourseSchema = new Schema({
   welcomeMessage: { type: String },
   congratulationsMessage: { type: String },
   description: { type: String },
-  content: { type: Schema.Types.ObjectId, ref: 'course_contents' },
+  sections: [{ type: Schema.Types.ObjectId, ref: 'course_sections', default: [] }],
   category: { type: Schema.Types.ObjectId, ref: 'course_categories' },
   instructors: { type: Schema.Types.ObjectId, ref: 'users' },
   isDeleted: { type: Boolean, default: false },

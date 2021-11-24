@@ -1,6 +1,4 @@
-const { Course, CourseCategory } = require('../schemas')
-
-const coursesListSeeder = () => {
+const coursesSeeder = () => {
   return (
     [
       {
@@ -39,9 +37,9 @@ const coursesListSeeder = () => {
             representativeTopic: "Development",
             courseImage: "https://www.filepicker.io/api/file/hDdzn2AcQccmYaE4h8iK",
             promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            "welcomeMessage": "Basic JavaScript knowledge is required",
-            "congratulationsMessage": "Basic JavaScript knowledge is required",
-            "description": "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback.",
           },
           {
             title: "React Native - The Practical Guide 2021",
@@ -75,7 +73,10 @@ const coursesListSeeder = () => {
             ],
             representativeTopic: "Development",
             courseImage: "https://www.filepicker.io/api/file/xD6OWhudQafqoshW5ZpM",
-            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           },
           {
             title: "React, NodeJS, Express & MongoDB - The MERN Fullstack Guide",
@@ -109,7 +110,10 @@ const coursesListSeeder = () => {
             ],
             representativeTopic: "Development",
             courseImage: "https://www.filepicker.io/api/file/TMGv8UTlyDnfF5jKec0w",
-            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           },
           {
             title: "JavaScript Algorithms - The Fundamentals",
@@ -143,7 +147,10 @@ const coursesListSeeder = () => {
             ],
             representativeTopic: "Development",
             courseImage: "https://process.fs.teachablecdn.com/ADNupMnWyR7kCWRvm76Laz/resize=width:705/https://www.filepicker.io/api/file/TWqzpMxDQ62UQUwxsGAA",
-            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           }
         ]
       },
@@ -183,9 +190,9 @@ const coursesListSeeder = () => {
             representativeTopic: "Development",
             courseImage: "https://img-b.udemycdn.com/course/240x135/637930_9a22_19.jpg?secure=Ibg7tAxyiX6Vrxgj1LrJLQ%3D%3D%2C1637744205",
             promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            "welcomeMessage": "Basic JavaScript knowledge is required",
-            "congratulationsMessage": "Basic JavaScript knowledge is required",
-            "description": "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           },
           {
             title: "The Complete Database Design & Modeling Beginners Tutorial",
@@ -219,7 +226,10 @@ const coursesListSeeder = () => {
             ],
             representativeTopic: "Development",
             courseImage: "https://img-b.udemycdn.com/course/240x135/1247516_568d_9.jpg?secure=C4KZNSrFLBae2V0Y2Z9P1w%3D%3D%2C1637765223",
-            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           },
           {
             title: "Learning Data Modeling",
@@ -253,7 +263,10 @@ const coursesListSeeder = () => {
             ],
             representativeTopic: "Development",
             courseImage: "https://img-b.udemycdn.com/course/240x135/357982_1a3a_4.jpg?secure=Sn1L8_S0HueN7yy6V2gQkw%3D%3D%2C1637734912",
-            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           },
           {
             title: "JavaScript Algorithms - The Fundamentals",
@@ -287,7 +300,10 @@ const coursesListSeeder = () => {
             ],
             representativeTopic: "Development",
             courseImage: "https://img-b.udemycdn.com/course/240x135/1247516_568d_9.jpg?secure=C4KZNSrFLBae2V0Y2Z9P1w%3D%3D%2C1637765223",
-            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           }
         ]
       },
@@ -327,9 +343,9 @@ const coursesListSeeder = () => {
             representativeTopic: "Development",
             courseImage: "https://img-c.udemycdn.com/course/240x135/1336872_db4d_7.jpg",
             promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            "welcomeMessage": "Basic JavaScript knowledge is required",
-            "congratulationsMessage": "Basic JavaScript knowledge is required",
-            "description": "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           },
           {
             title: "NLP Master Practitioner Training (Advanced to Specialist)",
@@ -363,7 +379,10 @@ const coursesListSeeder = () => {
             ],
             representativeTopic: "Development",
             courseImage: "https://img-c.udemycdn.com/course/240x135/1336870_9d77_10.jpg",
-            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           },
           {
             title: "React, NodeJS, Express & MongoDB - The MERN Fullstack Guide",
@@ -397,7 +416,10 @@ const coursesListSeeder = () => {
             ],
             representativeTopic: "Development",
             courseImage: "https://www.filepicker.io/api/file/TMGv8UTlyDnfF5jKec0w",
-            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           },
           {
             title: "100% Official NLP Practitioner Certification iGNLP™ / ABNLP",
@@ -431,7 +453,10 @@ const coursesListSeeder = () => {
             ],
             representativeTopic: "Development",
             courseImage: "https://img-c.udemycdn.com/course/240x135/1173854_8b3a_10.jpg",
-            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            promotionVideo: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            welcomeMessage: "Basic JavaScript knowledge is required",
+            congratulationsMessage: "Basic JavaScript knowledge is required",
+            description: "This course was completely updated, reflects the latest version of TypeScript and incorporated tons of student feedback."
           }
         ]
       },
@@ -499,17 +524,6 @@ const coursesListSeeder = () => {
   )
 }
 
-const seedCourseData = async () => {
-  await Course.deleteMany({})
-  await CourseCategory.deleteMany({})
-
-  for (let category of coursesListSeeder()) {
-    const newCategory = await CourseCategory.create({ title: category.title })
-    Course.insertMany(category.courses.map(c => ({ ...c, category: newCategory._id } )))
-  }
-}
-
 module.exports = {
-  coursesListSeeder,
-  seedCourseData
+  coursesSeeder
 }

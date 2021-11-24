@@ -7,6 +7,10 @@ router.get('/categories', courseController.getCourseCategoriesList)
 
 router.post('/categories', courseController.importManyCategories)
 
+router.get('/sections', courseController.getCourseSections)
+
+router.get('/lectures', courseController.getCourseLectures)
+
 router.get('/bestseller', courseController.getBestSellerCoursesList)
 
 router.get('/high-rating', courseController.getHighRatingCoursesList)
