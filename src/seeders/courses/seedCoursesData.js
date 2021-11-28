@@ -1,11 +1,11 @@
 const { Course, CourseCategory, CourseSection, CourseContent, Lecture, LectureContent } = require('../../schemas')
 const { coursesSeeder } = require('./coursesSeeder')
 const { courseSectionsSeeder } = require('./courseSectionsSeeder')
+const { pickRandomElementsFromArray } = require('../../utils/array')
 
-const seedCoursesData = async () => {
+const createCourseSections = async () => {
   const sections = []
   for (let section of courseSectionsSeeder()) {
-
     const lectures = []
     for (let lecture of section.lectures) {
       const lectureContentDoc = await LectureContent.create(lecture.content)
@@ -17,16 +17,23 @@ const seedCoursesData = async () => {
       learningObjective: section.learningObjective,
       lectures
     })
-
-    sections.push(sectionDoc)
+    sections.push(sectionDoc._id)
   }
 
-  console.log(sections)
+  return sections
+}
+
+const seedCoursesData = async () => {
+  
+  const sections = await createCourseSections()
 
   for (let category of coursesSeeder()) {
     const categoryDoc = await CourseCategory.create({ title: category.title })
 
-    Course.insertMany(category.courses.map(c => ({ ...c, category: categoryDoc._id })))
+    console.log({categoryDoc})
+    //add randomly three sections to each course's curriculum
+    Course.insertMany(category.courses.map(c => ({ ...c, category: categoryDoc._id, sections: pickRandomElementsFromArray(sections, 3) })))
+
   }
 }
 

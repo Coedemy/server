@@ -1,29 +1,29 @@
 const _ = require('lodash')
 
 const { ObjectId } = require('mongodb')
-const { Course, CourseCategory, Review, CourseSection, Lecture } = require('../schemas')
+const { Course, CourseCategory, CourseContent, CourseSection, Lecture, Review } = require('../schemas')
 // const { groupObjectByKey } = require('../utils/object')
 
 const getCourseCategoriesList = async (req, res, next) => {
-  const courseCategoryList = await CourseCategory.find()
+  const courseCategoryList = await CourseCategory.find().select('title')
 
   res.json({
     total: courseCategoryList.length,
-    courseCategoryList: courseCategoryList.map(c => _.pick(c, 'title'))
+    courseCategoryList
   })
 }
 
 const getCoursesListByCategory = async (req, res, next) => {
-  let courses = await Course.find().populate('category').populate('reviews')
-  courses = courses.map(c => ({
-    ...c._doc,
-    category: c._doc.category.title,
-    reviews: c._doc.reviews.map(review => _.pick(review, '_id', 'reply', 'numberOfStars', 'comment', 'reviewer'))
-  }))
-
+  let courses = await Course.find().populate('category', 'title').populate('reviews')
+    .select('title subtitle price language representativeTopic courseImage category reviews averageRating description')
+  // courses = courses.map(c => ({
+  //   ...c._doc,
+  //   category: c._doc.category.title,
+  //   reviews: c._doc.reviews.map(review => _.pick(review, '_id', 'reply', 'numberOfStars', 'comment', 'reviewer'))
+  // }))
   res.json({
     total: courses.length,
-    courses: courses.map(c => _.pick(c, '_id', 'reviews', 'title', 'averageRating', 'courseImage', 'promotionVideo', 'description', 'instructor', 'price', 'category'))
+    courses: courses
   })
 }
 
@@ -43,7 +43,7 @@ const searchCourses = async (req, res, next) => {
   res.json('searchCourses')
 }
 
-const getCourseSections = async (req, res, next) => {
+const getAllCourseSections = async (req, res, next) => {
   const sections = await CourseSection.find()
   res.json({
     total: sections.length,
@@ -51,7 +51,7 @@ const getCourseSections = async (req, res, next) => {
   })
 }
 
-const getCourseLectures = async (req, res, next) => {
+const getAllCourseLectures = async (req, res, next) => {
   const lectures = await Lecture.find()
   res.json({
     total: lectures.length,
@@ -61,13 +61,27 @@ const getCourseLectures = async (req, res, next) => {
 
 const getCourseDetail = async (req, res, next) => {
   const courseId = req.params.id
-  const course = await Course.findById(courseId)
+  let course = await Course.findById(courseId).populate('category', 'title').populate('reviews').populate({
+    path: 'sections',
+    select: '-isDeleted -__v',
+    populate: {
+      path: 'lectures',
+      select: '-isDeleted -__v',
+      populate: {
+        path: 'content',
+        select: '-isDeleted -__v',
+      }
+    }
+  })
+
+  course = {
+    ...course,
+    category: course.category.title,
+    // reviews: course.reviews.map(review => _.pick(review, '_id', 'reply', 'numberOfStars', 'comment', 'reviewer')),
+    // sections: course.sections.map(section => _.pick(section, '_id', ))
+  }
 
   res.json({ course: _.omit(course._doc, '__v', 'isDeleted') })
-}
-
-const getCourseContent = async (req, res, next) => {
-  res.json('getCourseContent')
 }
 
 const createCourse = async (req, res, next) => {
@@ -112,7 +126,7 @@ const importManyCourses = async (req, res, next) => {
 
 const importManyCategories = async (req, res, next) => {
   const importedCategories = req.body.categories
-  console.log({ importedCategories})
+  console.log({ importedCategories })
   const importedCategoryDocs = []
 
   for (let category of importedCategories) {
@@ -146,8 +160,8 @@ const removeCourse = async (req, res, next) => {
 }
 
 module.exports = {
-  getCourseCategoriesList, getCoursesListByCategory, getCourseSections,
-  getHighRatingCoursesList, getBestSellerCoursesList, getCourseLectures,
-  getCourseDetail, getCourseContent, searchCourses, reviewCourse,
+  getCourseCategoriesList, getCoursesListByCategory, getAllCourseSections,
+  getHighRatingCoursesList, getBestSellerCoursesList, getAllCourseLectures,
+  getCourseDetail, searchCourses, reviewCourse,
   createCourse, updateCourse, removeCourse, importManyCourses, importManyCategories
 }
