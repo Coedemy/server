@@ -7,6 +7,14 @@ const ImageSchema = new Schema({
   url: { type: String },
   extension: { type: String },
   isDeleted: { type: Boolean, default: false }
-}, { timestamps: true })
+}, {
+  timestamps: true,
+  toJSON: {
+    transform: function (doc, obj) {
+      delete obj.isDeleted
+      delete obj.__v
+      return obj
+    }
+  }})
 
 module.exports = mongoose.model('images', ImageSchema)

@@ -20,7 +20,15 @@ const UserSchema = new Schema({
   myLearning: [{ type: Schema.Types.ObjectId, ref: 'courses', default: [] }],
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'courses', default: [] }],
   cart: { type: Schema.Types.ObjectId, ref: 'carts' }
-}, { timestamps: true })
+}, {
+  timestamps: true,
+  toJSON: {
+    transform: function (doc, obj) {
+      delete obj.isDeleted
+      delete obj.__v
+      return obj
+    }
+  }})
 
 UserSchema.plugin(findOrCreate)
 

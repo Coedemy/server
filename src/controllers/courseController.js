@@ -5,7 +5,7 @@ const { Course, CourseCategory, CourseContent, CourseSection, Lecture, Review } 
 // const { groupObjectByKey } = require('../utils/object')
 
 const getCourseCategoriesList = async (req, res, next) => {
-  const courseCategoryList = await CourseCategory.find().select('title')
+  const courseCategoryList = await CourseCategory.find()
 
   res.json({
     total: courseCategoryList.length,
@@ -15,7 +15,7 @@ const getCourseCategoriesList = async (req, res, next) => {
 
 const getCoursesListByCategory = async (req, res, next) => {
   let courses = await Course.find().populate('category', 'title').populate('reviews')
-    .select('title subtitle price language representativeTopic courseImage category reviews averageRating description')
+    .select('title subtitle slug price language representativeTopic courseImage category reviews averageRating description')
   // courses = courses.map(c => ({
   //   ...c._doc,
   //   category: c._doc.category.title,
@@ -23,7 +23,7 @@ const getCoursesListByCategory = async (req, res, next) => {
   // }))
   res.json({
     total: courses.length,
-    courses: courses
+    courses
   })
 }
 
@@ -60,8 +60,9 @@ const getAllCourseLectures = async (req, res, next) => {
 }
 
 const getCourseDetail = async (req, res, next) => {
-  const courseId = req.params.id
-  let course = await Course.findById(courseId).populate('category', 'title').populate('reviews').populate({
+  const queries = req.query
+
+  const courseDoc = await Course.findOne(queries).populate('category', 'title').populate('reviews').populate({
     path: 'sections',
     select: '-isDeleted -__v',
     populate: {
@@ -70,18 +71,25 @@ const getCourseDetail = async (req, res, next) => {
       populate: {
         path: 'content',
         select: '-isDeleted -__v',
+        populate: {
+          path: 'video',
+          select: '-isDeleted -__v'
+        }
       }
     }
   })
 
-  course = {
-    ...course,
-    category: course.category.title,
-    // reviews: course.reviews.map(review => _.pick(review, '_id', 'reply', 'numberOfStars', 'comment', 'reviewer')),
-    // sections: course.sections.map(section => _.pick(section, '_id', ))
-  }
+  const course = courseDoc.toObject()
+  course.totalHours = course.sections.reduce((totalHours, section) => totalHours + section.lectures.reduce((totalSectionHours, lecture) => {
+        if (lecture.content.lectureContentType === 'VIDEO') {
+          return totalSectionHours + lecture.content.video.duration
+        }
+        return totalSectionHours
+    }, 0), 0),
+  
+  course.totalLectures = course.sections.reduce((totalLectures, section) => totalLectures + section.lectures.length, 0)
 
-  res.json({ course: _.omit(course._doc, '__v', 'isDeleted') })
+  res.json({ course })
 }
 
 const createCourse = async (req, res, next) => {

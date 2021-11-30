@@ -11,6 +11,14 @@ const LectureResourceSchema = new Schema({
   lectureResourceType: { type: LectureResourceType, defaultValue: LectureResourceType.EXTERNAL_RESOURCE },
   resourceUrl: { type: String },
   isDeleted: { type: Boolean, default: false }
-}, { timestamps: true })
+}, {
+  timestamps: true,
+  toJSON: {
+    transform: function (doc, obj) {
+      delete obj.isDeleted
+      delete obj.__v
+      return obj
+    }
+  }})
 
 module.exports = mongoose.model('lecture_resources', LectureResourceSchema)

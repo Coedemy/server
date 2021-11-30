@@ -7,6 +7,14 @@ const QuizSchema = new Schema({
   answer: { type: String },
   wrongOptions: [{ type: String, default: [] }],
   isDeleted: { type: Boolean, default: false }
-}, { timestamps: true })
+}, {
+  timestamps: true,
+  toJSON: {
+    transform: function (doc, obj) {
+      delete obj.isDeleted
+      delete obj.__v
+      return obj
+    }
+  }})
 
-module.exports = mongoose.model('quizes', QuizSchema)
+module.exports = mongoose.model('quizzes', QuizSchema)

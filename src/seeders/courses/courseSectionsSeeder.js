@@ -14,18 +14,28 @@ const courseSectionsSeeder = () => {
         title: "Fundamental About MicroServices",
         lectures: [
           {
+            canPreview: true,
             title: "How to get help",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           },
           {
+            canPreview: true,
             title: "Data in MicroServices",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.trailer1
+              video: {
+                url: videoSources.trailer1,
+                alt: 'trailer1',
+                duration: 734
+              }
             },
             resource: []
           },
@@ -33,15 +43,24 @@ const courseSectionsSeeder = () => {
             title: "Big Problem in Data",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.sintelTrailer
+              video: {
+                url: videoSources.sintelTrailer,
+                alt: 'sintelTrailer',
+                duration: 52
+              }
             },
             resource: []
           },
           {
+            canPreview: true,
             title: "Event-Based Communication",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.trailer1
+              video: {
+                url: videoSources.trailer1,
+                alt: 'trailer1',
+                duration: 734
+              }
             },
             resource: []
           }
@@ -52,10 +71,15 @@ const courseSectionsSeeder = () => {
         title: "A Mini-MicroService App",
         lectures: [
           {
+            canPreview: true,
             title: "App Overview",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.trailer1
+              video: {
+                url: videoSources.trailer1,
+                alt: 'trailer1',
+                duration: 734
+              }
             },
             resource: []
           },
@@ -63,7 +87,11 @@ const courseSectionsSeeder = () => {
             title: "Post Services Creation",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           },
@@ -71,7 +99,11 @@ const courseSectionsSeeder = () => {
             title: "Implement a Comment Service",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.trailer1
+              video: {
+                url: videoSources.trailer1,
+                alt: 'trailer1',
+                duration: 734
+              }
             },
             resource: []
           },
@@ -79,7 +111,11 @@ const courseSectionsSeeder = () => {
             title: "React project setup",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.sintelTrailer
+              video: {
+                url: videoSources.sintelTrailer,
+                alt: 'sintelTrailer',
+                duration: 52
+              }
             },
             resource: []
           },
@@ -87,7 +123,11 @@ const courseSectionsSeeder = () => {
             title: "Display Comment",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           }
@@ -98,10 +138,15 @@ const courseSectionsSeeder = () => {
         title: "Run services with docker",
         lectures: [
           {
+            canPreview: true,
             title: "Deployment Issues",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           },
@@ -109,7 +154,11 @@ const courseSectionsSeeder = () => {
             title: "W;hy Docker?",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           },
@@ -117,7 +166,11 @@ const courseSectionsSeeder = () => {
             title: "Dockerizing the Posts Service",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           },
@@ -125,7 +178,11 @@ const courseSectionsSeeder = () => {
             title: "Dockerizing other Services",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           }
@@ -136,18 +193,28 @@ const courseSectionsSeeder = () => {
         title: "Testing isolated MicroServices",
         lectures: [
           {
+            canPreview: true,
             title: "Scope of Testing",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyTrailer
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           },
           {
+            canPreview: true,
             title: "Testing goal",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyTrailer
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           }
@@ -158,10 +225,15 @@ const courseSectionsSeeder = () => {
         title: "Code sharing and reuse between services",
         lectures: [
           {
+            canPreview: true,
             title: "Shared Logic Between Services",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           },
@@ -169,7 +241,11 @@ const courseSectionsSeeder = () => {
             title: "NPM Organizations",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           },
@@ -177,7 +253,11 @@ const courseSectionsSeeder = () => {
             title: "Publish NPM Modules",
             content: {
               lectureContentType: "VIDEO",
-              videoUrl: videoSources.bunnyMovie
+              video: {
+                url: videoSources.bunnyMovie,
+                alt: 'bunnyMovie',
+                duration: 33
+              }
             },
             resource: []
           }
