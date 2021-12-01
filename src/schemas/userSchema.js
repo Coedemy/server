@@ -5,6 +5,7 @@ const findOrCreate = require('mongoose-findorcreate')
 
 const UserSchema = new Schema({
   firstName: { type: String, require, trim: true },
+  username: { type: String, require, trim: true },
   lastName: { type: String, require, trim: true },
   headline: { type: String },
   language: { type: String },
@@ -28,7 +29,8 @@ const UserSchema = new Schema({
       delete obj.__v
       return obj
     }
-  }})
+  }
+})
 
 UserSchema.plugin(findOrCreate)
 

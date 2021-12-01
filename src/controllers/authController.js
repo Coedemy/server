@@ -1,11 +1,11 @@
-const jwt = require("jsonwebtoken")
+const jwt = require('jsonwebtoken')
 
-const { User } = require("../schemas")
-const { verifyToken } = require("../middlewares/require_auth")
-const { throwError, ErrorStatus } = require("../services/error")
-const { sendEmailSES } = require("../services/email")
-const { sendSMS } = require("../services/sms")
-const { generateAccessToken, generateRefreshToken } = require("../services/jwt")
+const { User } = require('../schemas')
+const { verifyToken } = require('../middlewares/require_auth')
+const { throwError, ErrorStatus } = require('../services/error')
+const { sendEmailSES } = require('../services/email')
+const { sendSMS } = require('../services/sms')
+const { generateAccessToken, generateRefreshToken } = require('../services/jwt')
 
 let refreshTokens = []
 const { AWS_SYSTEM_EMAIL } = process.env
@@ -23,7 +23,7 @@ const login = async (req, res) => {
 
   if (!isValidPassword)
     return res.status(401).json({
-      message: "Wrong password!",
+      message: 'Wrong password!',
     })
 
   //sign token
@@ -43,8 +43,8 @@ const login = async (req, res) => {
   // await sendEmailSES({
   //     to: AWS_SYSTEM_EMAIL,
   //     from: email,
-  //     subject: "Login successfully",
-  //     text: "Congratulation! You are authenticated. You can access our services."
+  //     subject: 'Login successfully',
+  //     text: 'Congratulation! You are authenticated. You can access our services.'
   // })
 
   // await sendSMS({
@@ -52,22 +52,8 @@ const login = async (req, res) => {
   //     message: 'Hello Khanh Chuong'
   // })
 
-  const {
-    _id,
-    username,
-    bio,
-    location,
-    website,
-    joinedDate,
-    avatar,
-    coverPicture,
-  } = user
-
   res.status(200).json({
-    _id,
-    username,
-    email,
-    profile: { bio, location, website, joinedDate, avatar, coverPicture },
+    user,
     accessToken,
     refreshToken,
   })
@@ -99,8 +85,8 @@ const register = async (req, res) => {
 }
 
 const getAccessToken = (req, res) => {
-  const authorizationHeader = req.headers["authorization"]
-  const refreshToken = authorizationHeader && authorizationHeader.split(" ")[1]
+  const authorizationHeader = req.headers['authorization']
+  const refreshToken = authorizationHeader && authorizationHeader.split(' ')[1]
 
   const index = refreshTokens.find((t) => t === refreshToken)
   if (!index) {
@@ -119,13 +105,13 @@ const getAccessToken = (req, res) => {
   res.status(200).json({ accessToken })
 }
 
-const forgotPassword = (req, res) => {}
+const forgotPassword = (req, res) => { }
 
-const updatePassword = (req, res) => {}
+const updatePassword = (req, res) => { }
 
 const logout = (req, res) => {
-  const authorizationHeader = req.headers["authorization"]
-  const refreshToken = authorizationHeader && authorizationHeader.split(" ")[1]
+  const authorizationHeader = req.headers['authorization']
+  const refreshToken = authorizationHeader && authorizationHeader.split(' ')[1]
 
   refreshTokens = refreshTokens.filter((t) => {
     return t !== refreshToken
@@ -141,7 +127,7 @@ const fbLoginSuccess = (req, res) => {
 }
 
 const fbLoginFailed = (req, res) => {
-  res.status(400).json("Authenticate Failed")
+  res.status(400).json('Authenticate Failed')
 }
 
 module.exports = {
