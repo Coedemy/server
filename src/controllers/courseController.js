@@ -81,13 +81,13 @@ const getCourseDetail = async (req, res, next) => {
 
   const course = courseDoc.toObject()
   course.totalHours = course.sections.reduce((totalHours, section) => totalHours + section.lectures.reduce((totalSectionHours, lecture) => {
-        if (lecture.content.lectureContentType === 'VIDEO') {
-          return totalSectionHours + lecture.content.video.duration
-        }
-        return totalSectionHours
-    }, 0), 0),
-  
-  course.totalLectures = course.sections.reduce((totalLectures, section) => totalLectures + section.lectures.length, 0)
+    if (lecture.content.lectureContentType === 'VIDEO') {
+      return totalSectionHours + lecture.content.video.duration
+    }
+    return totalSectionHours
+  }, 0), 0),
+
+    course.totalLectures = course.sections.reduce((totalLectures, section) => totalLectures + section.lectures.length, 0)
 
   res.json({ course })
 }
@@ -167,9 +167,23 @@ const removeCourse = async (req, res, next) => {
   res.json('remove course')
 }
 
+const addCourseToCart = async (req, res, next) => {
+  const user = req.user
+  const courseId = req.params.id
+
+  res.json({ user, courseId })
+}
+
+const removeCourseFromCart = async (req, res, next) => {
+  const user = req.user
+  const courseId = req.params.id
+
+  res.json({ user, courseId })
+}
+
 module.exports = {
   getCourseCategoriesList, getCoursesListByCategory, getAllCourseSections,
   getHighRatingCoursesList, getBestSellerCoursesList, getAllCourseLectures,
-  getCourseDetail, searchCourses, reviewCourse,
+  getCourseDetail, searchCourses, reviewCourse, addCourseToCart, removeCourseFromCart,
   createCourse, updateCourse, removeCourse, importManyCourses, importManyCategories
 }

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { courseController } = require('../controllers')
+const { requireAuth } = require('../middlewares/require_auth')
 
 router.get('/categories', courseController.getCourseCategoriesList)
 
@@ -27,7 +28,9 @@ router.post('/:id/review', courseController.reviewCourse)
 
 router.get('/detail', courseController.getCourseDetail)
 
-// router.get('/:id', courseController.getCourseDetail)
+router.post('/:id/add-to-cart', requireAuth, courseController.addCourseToCart)
+
+router.post('/:id/remove-from-cart', requireAuth, courseController.removeCourseFromCart)
 
 router.patch('/:id', courseController.updateCourse)
 

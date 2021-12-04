@@ -5,7 +5,6 @@ const requireAuth = (req, res, next) => {
   const authorizationHeader = req.headers['authorization']
   const accessToken = authorizationHeader && authorizationHeader.split(' ')[1]
 
-  console.log('require auth')
   try {
     if (!accessToken)
       throwError(ErrorStatus.UNAUTHORIZED)

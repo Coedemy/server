@@ -1,20 +1,24 @@
 const express = require('express')
 
 const { userController } = require('../controllers')
+const { requireAuth } = require('../middlewares/require_auth')
 const { uploadMultipleFiles } = require('../services/upload')
 
 const router = express.Router()
 
-router.route('/').get(userController.getAllUsers)
+router.get('/', userController.getAllUsers)
 
-router.route('/search').get(userController.searchUserByUsername)
+router.get('/search', userController.searchUserByUsername)
 
-router.route('/:id').get(userController.getUser)
+router.get('/properties', requireAuth, userController.getUserProperties)
 
-router.route('/profile')
-    .patch(uploadMultipleFiles(["avatar", "coverPicture"]), userController.updateUser)
+router.post('/properties', requireAuth, userController.initializeUserProperties)
 
-router.route('/profile/:key')
-    .get(userController.getCoverPicture)
+router.get('/:id', userController.getUser)
+
+router.patch('/profile', uploadMultipleFiles(["avatar", "coverPicture"]), userController.updateUser)
+
+router.get('/profile/:key', userController.getCoverPicture)
+
 
 module.exports = router

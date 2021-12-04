@@ -20,12 +20,14 @@ const UserSchema = new Schema({
   password: { type: String },
   myLearning: [{ type: Schema.Types.ObjectId, ref: 'courses', default: [] }],
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'courses', default: [] }],
-  cart: { type: Schema.Types.ObjectId, ref: 'carts' }
+  cart: [{ type: Schema.Types.ObjectId, ref: 'courses', default: [] }]
 }, {
   timestamps: true,
   toJSON: {
     transform: function (doc, obj) {
       delete obj.isDeleted
+      delete obj.password
+      delete obj.authMethod
       delete obj.__v
       return obj
     }
@@ -37,12 +39,19 @@ UserSchema.plugin(findOrCreate)
 UserSchema.pre(
   'save',
   async function (next) {
-    const { authMethod, password } = this
+    const { authMethod } = this
     if (authMethod !== 'JWT') next()
-
-    const hash = await bcrypt.hash(password, 10)
-    this.password = hash
     next()
+  }
+)
+
+UserSchema.post(
+  'findOneAndUpdate',
+  async function (data) {
+    const { cart } = data
+    let cartItemsSet = [...new Set(cart)]
+    data.cart = cartItemsSet
+    data.save()
   }
 )
 

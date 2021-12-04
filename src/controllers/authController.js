@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 const { User } = require('../schemas')
 const { verifyToken } = require('../middlewares/require_auth')
@@ -13,6 +14,7 @@ const { AWS_SYSTEM_EMAIL } = process.env
 const login = async (req, res) => {
   const { email, password } = req.body
 
+  console.log({ email, password })
   const user = await User.findOne({ email })
   if (!user)
     return res.status(409).json({
@@ -20,6 +22,7 @@ const login = async (req, res) => {
     })
 
   const isValidPassword = await user.isValidPassword(password)
+  console.log({ isValidPassword })
 
   if (!isValidPassword)
     return res.status(401).json({
@@ -53,7 +56,7 @@ const login = async (req, res) => {
   // })
 
   res.status(200).json({
-    user,
+    user: payload,
     accessToken,
     refreshToken,
   })
@@ -68,19 +71,30 @@ const register = async (req, res) => {
       message: `Email already exist! Please select another email!`,
     })
 
+  console.log({ email, username, password })
+
+  const hash = await bcrypt.hash(password, 10)
+
   const createdUser = await User.create({
     username,
     email,
-    password,
+    password: hash,
   })
 
-  res.status(201).json({
+  const payload = {
     id: createdUser._id,
-    username: createdUser.username,
     email: createdUser.email,
-    profilePicture: createdUser.profilePicture,
-    avatar: createdUser.avatar,
-    joinedDate: Date.now(),
+    username: createdUser.username,
+  }
+
+
+  const accessToken = generateAccessToken(payload)
+  const refreshToken = generateRefreshToken(payload)
+
+  res.status(201).json({
+    user: payload,
+    accessToken,
+    refreshToken
   })
 }
 

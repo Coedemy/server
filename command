@@ -9,3 +9,7 @@
 
 #clear all network: 
   docker network rm $(docker network ls | tail -n+2 | awk '{if($2 !~ /bridge|none|host/){ print $1 }}')
+
+#when mongo service failed
+sudo service mongod stop
+sudo mongod
