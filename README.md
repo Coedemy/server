@@ -1,11 +1,11 @@
 <p>Create .env file and put these to it: </p>
 
 <ul>
-  <li>PORT=5000</li>
-  <li>SYSTEM_URL=http://localhost:5000</li>
+  <li>PORT=</li>
+  <li>SYSTEM_URL=</li>
 
-  <li>ACCESS_TOKEN_SECRET=accesssecret</li>
-  <li>REFRESH_TOKEN_SECRET=refreshsecret</li>
+  <li>ACCESS_TOKEN_SECRET=</li>
+  <li>REFRESH_TOKEN_SECRET=</li>
 
   <li>MONGO_USERNAME=</li>
   <li>MONGO_PASSWORD=</li>
