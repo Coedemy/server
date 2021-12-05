@@ -68,33 +68,60 @@ const updateUser = async (req, res, next) => {
   // res.status(200).json({imagePath: `/images/${result.Key}`})
 }
 
-const getUserProperties = async (req, res, next) => {
-  const userId = req.user.id
-
-  const user = await User.findById(userId)
-
-  res.json({
-    userProperties: user
-  })
-}
-
-const initializeUserProperties = async (req, res, next) => {
+const initCart = async (req, res, next) => {
   const user = req.user
   const { cart } = req.body
-  const courseIdList = cart.map(course => course._id)
 
+  console.log(req.body.cart.length)
   try {
-    const initializedProperties = await User.findOneAndUpdate(
+    const courseIdList = cart.map(course => course._id)
+    const updatedUser = await User.findOneAndUpdate(
       { _id: ObjectId(user.id) },
       { $push: { cart: { $each: [...courseIdList] } } },
       { new: true })
-      .populate('cart').exec()
-    console.log({ total: initializedProperties.cart.length })
-    res.json({ cart: initializedProperties.cart })
+      .populate({
+        path: 'cart',
+        populate: {
+          path: 'category',
+        }
+      }).exec()
+    res.json({ cart: updatedUser.cart })
   }
   catch (err) {
     next(err)
   }
+}
+
+const updateCart = async (req, res, next) => {
+  const user = req.user
+  const { updateType, courseId } = req.body
+
+  try {
+    let updateQuery
+    if (updateType === 'add') {
+      updateQuery = { $push: { cart: courseId } }
+    }
+    else if (updateType === 'remove') {
+      updateQuery = { $pull: { cart: courseId } }
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: ObjectId(user.id) },
+      updateQuery,
+      { new: true })
+      .populate({
+        path: 'cart',
+        populate: {
+          path: 'category',
+        }
+      }).exec()
+    console.log({ cart: updatedUser.cart.length, updateType, updateQuery, courseId })
+    res.json({ cart: updatedUser.cart })
+  }
+  catch (err) {
+    next(err)
+  }
+
 }
 
 module.exports = {
@@ -103,6 +130,6 @@ module.exports = {
   searchUserByUsername,
   updateUser,
   getCoverPicture,
-  getUserProperties,
-  initializeUserProperties
+  initCart,
+  updateCart
 }

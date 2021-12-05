@@ -48,9 +48,10 @@ UserSchema.pre(
 UserSchema.post(
   'findOneAndUpdate',
   async function (data) {
-    const { cart } = data
-    let cartItemsSet = [...new Set(cart)]
-    data.cart = cartItemsSet
+    if (data.cart) {
+      const cartItemsSet = [...new Set(data.cart)]
+      data.cart = cartItemsSet
+    }
     data.save()
   }
 )

@@ -10,9 +10,9 @@ router.get('/', userController.getAllUsers)
 
 router.get('/search', userController.searchUserByUsername)
 
-router.get('/properties', requireAuth, userController.getUserProperties)
+router.post('/cart', requireAuth, userController.initCart)
 
-router.post('/properties', requireAuth, userController.initializeUserProperties)
+router.patch('/cart', requireAuth, userController.updateCart)
 
 router.get('/:id', userController.getUser)
 
