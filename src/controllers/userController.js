@@ -68,11 +68,31 @@ const updateUser = async (req, res, next) => {
   // res.status(200).json({imagePath: `/images/${result.Key}`})
 }
 
-const initCart = async (req, res, next) => {
+const toggleFavorite = async (req, res, next) => {
+  const user = req.user
+  const { courseId } = req.body
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: ObjectId(user.id) },
+      { $push: { wishlist: courseId } },
+      { new: true })
+      .populate({
+        path: 'wishlist',
+        populate: {
+          path: 'category',
+        }
+      }).exec()
+    res.json({ wishlist: updatedUser.wishlist })
+  }
+  catch (err) {
+    next(err)
+  }
+}
+
+const loadCart = async (req, res, next) => {
   const user = req.user
   const { cart } = req.body
 
-  console.log(req.body.cart.length)
   try {
     const courseIdList = cart.map(course => course._id)
     const updatedUser = await User.findOneAndUpdate(
@@ -115,13 +135,27 @@ const updateCart = async (req, res, next) => {
           path: 'category',
         }
       }).exec()
-    console.log({ cart: updatedUser.cart.length, updateType, updateQuery, courseId })
     res.json({ cart: updatedUser.cart })
   }
   catch (err) {
     next(err)
   }
+}
 
+// wishlist, myLearning
+const loadAuthUserProperties = async (req, res, next) => {
+  const user = req.user
+
+  try {
+    const foundUser = await User.findById(user.id)
+      .populate({ path: 'wishlist', populate: { path: 'category' } })
+      .populate({ path: 'myLearning', populate: { path: 'category' } })
+
+    res.json({ wishlist: foundUser.wishlist, myLearning: foundUser.myLearning })
+  }
+  catch (err) {
+    next(err)
+  }
 }
 
 module.exports = {
@@ -130,6 +164,8 @@ module.exports = {
   searchUserByUsername,
   updateUser,
   getCoverPicture,
-  initCart,
-  updateCart
+  loadAuthUserProperties,
+  loadCart,
+  updateCart,
+  toggleFavorite
 }

@@ -6,6 +6,9 @@ const pickRandomElementsFromArray = (array, numberOfElement) => {
   return selectedElement
 }
 
+const findDuplicateItems = array => array.filter((item, index) => array.indexOf(item) !== index)
+
 module.exports = {
-  pickRandomElementsFromArray
+  pickRandomElementsFromArray,
+  findDuplicateItems
 }

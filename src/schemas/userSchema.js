@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const Schema = mongoose.Schema
 const findOrCreate = require('mongoose-findorcreate')
 
+const { findDuplicateItems } = require('../utils/array')
+
 const UserSchema = new Schema({
   firstName: { type: String, require, trim: true },
   username: { type: String, require, trim: true },
@@ -48,9 +50,14 @@ UserSchema.pre(
 UserSchema.post(
   'findOneAndUpdate',
   async function (data) {
+    console.log({ data })
     if (data.cart) {
       const cartItemsSet = [...new Set(data.cart)]
       data.cart = cartItemsSet
+    }
+    if (data.wishlist) {
+      const duplicateCoursesId = findDuplicateItems(data.wishlist.map(course => course._id))
+      data.wishlist = data.wishlist.filter(course => !duplicateCoursesId.includes(course._id))
     }
     data.save()
   }
