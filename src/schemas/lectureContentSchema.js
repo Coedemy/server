@@ -12,7 +12,7 @@ const Schema = mongoose.Schema
 
 const LectureContentSchema = new Schema({
   lectureContentType: { type: LectureContentType, defaultValue: LectureContentType.ARTICLE },
-  articleUrl: { type: String, default: '' },
+  articleContent: { type: String, default: '' },
   video: { type: Schema.Types.ObjectId, ref: 'videos' },
   quizzesList: [{ type: Schema.Types.ObjectId, ref: 'quizzes', default: [] }],
   isDeleted: { type: Boolean, default: false }
@@ -24,6 +24,7 @@ const LectureContentSchema = new Schema({
       delete obj.__v
       return obj
     }
-  }})
+  }
+})
 
 module.exports = mongoose.model('lecture_contents', LectureContentSchema)

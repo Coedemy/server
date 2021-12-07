@@ -11,13 +11,16 @@ const createCourseSections = async () => {
     const lectures = []
     for (let lecture of section.lectures) {
       //handle if lecture is video
-      let videoId = undefined
+      let lectureContentDoc
       if (lecture.content.lectureContentType === "VIDEO") {
         const videoDoc = await Video.create(lecture.content.video)
         videoId = videoDoc._id
+        lectureContentDoc = await LectureContent.create({ ...lecture.content, video: videoId })
       }
-      
-      const lectureContentDoc = await LectureContent.create({ ...lecture.content, video: videoId})
+      else if (lecture.content.lectureContentType === "ARTICLE") {
+        lectureContentDoc = await LectureContent.create({ ...lecture.content, articleContent: lecture.content.articleContent })
+      }
+
       const lectureDoc = await Lecture.create({ title: lecture.title, content: lectureContentDoc._id, canPreview: lecture.canPreview })
       lectures.push(lectureDoc._id)
     }
@@ -34,14 +37,14 @@ const createCourseSections = async () => {
 }
 
 const seedCoursesData = async () => {
-  
+
   const sections = await createCourseSections()
 
   for (let category of coursesSeeder()) {
     const categoryDoc = await CourseCategory.create({ title: category.title })
     //add randomly three sections to each course's curriculum
     for (let course of category.courses) {
-      course.slug = slugify(course.title, { lower: true } )
+      course.slug = slugify(course.title, { lower: true })
       course.category = categoryDoc._id
       course.sections = pickRandomElementsFromArray(sections, 6)
       Course.create(course)
