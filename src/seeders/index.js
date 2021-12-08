@@ -1,4 +1,4 @@
-const { connectToMongoDb, disconnectFromMongDb } = require('../services/database')
+const { connectToMongoDb, disconnectFromMongDb } = require('../helpers/database')
 const { seedCoursesData } = require('./courses/seedCoursesData')
 
 const startSeeding = async () => {

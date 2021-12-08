@@ -3,10 +3,10 @@ const bcrypt = require('bcrypt')
 
 const { User } = require('../schemas')
 const { verifyToken } = require('../middlewares/require_auth')
-const { throwError, ErrorStatus } = require('../services/error')
-const { sendEmailSES } = require('../services/email')
-const { sendSMS } = require('../services/sms')
-const { generateAccessToken, generateRefreshToken } = require('../services/jwt')
+const { throwError, ErrorStatus } = require('../helpers/error')
+const { sendEmailSES } = require('../helpers/email')
+const { sendSMS } = require('../helpers/sms')
+const { generateAccessToken, generateRefreshToken } = require('../helpers/jwt')
 
 let refreshTokens = []
 const { AWS_SYSTEM_EMAIL } = process.env

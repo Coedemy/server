@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { authController } = require('../controllers')
-const { passport, loginPassportFb } = require('../services/oauth')
+const { passport, loginPassportFb } = require('../helpers/oauth')
 
 router.use(passport.initialize())
 

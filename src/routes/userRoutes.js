@@ -2,7 +2,7 @@ const express = require('express')
 
 const { userController } = require('../controllers')
 const { requireAuth } = require('../middlewares/require_auth')
-const { uploadMultipleFiles } = require('../services/upload')
+const { uploadMultipleFiles } = require('../helpers/upload')
 
 const router = express.Router()
 

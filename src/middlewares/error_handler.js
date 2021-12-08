@@ -1,4 +1,4 @@
-const { ErrorStatus, throwError } = require('../services/error')
+const { ErrorStatus, throwError } = require('../helpers/error')
 
 const errorHandler = (error, req, res, next) => {
     console.log(error)

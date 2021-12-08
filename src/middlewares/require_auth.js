@@ -1,5 +1,5 @@
-const { throwError, ErrorStatus } = require('../services/error')
-const { verifyToken } = require('../services/jwt')
+const { throwError, ErrorStatus } = require('../helpers/error')
+const { verifyToken } = require('../helpers/jwt')
 
 const requireAuth = (req, res, next) => {
   const authorizationHeader = req.headers['authorization']

@@ -4,7 +4,7 @@ const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
 
 const { User } = require('../schemas')
-const { uploadFileToS3, getFileStreamFromS3 } = require('../services/upload')
+const { uploadFileToS3, getFileStreamFromS3 } = require('../helpers/upload')
 
 const getAllUsers = async (req, res) => {
   const users = await User.find()

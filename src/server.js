@@ -11,8 +11,8 @@ const { requireAuth } = require('./middlewares/require_auth')
 const PORT = process.env.PORT
 const app = express()
 const server = http.createServer(app)
-const { connectSocket } = require('./services/socket')
-const { connectToMongoDb } = require('./services/database')
+const { connectSocket } = require('./helpers/socket')
+const { connectToMongoDb } = require('./helpers/database')
 
 //handle middlewares
 app.use('/storage', express.static(__dirname + '/storage'))
