@@ -26,7 +26,7 @@ router.post('/many', courseController.importManyCourses)
 
 router.post('/:id/review', courseController.reviewCourse)
 
-router.get('/detail', courseController.getCourseDetail)
+router.post('/detail', courseController.getCourseDetail)
 
 router.post('/:id/add-to-cart', requireAuth, courseController.addCourseToCart)
 

@@ -1,7 +1,7 @@
 const _ = require('lodash')
 
 const { ObjectId } = require('mongodb')
-const { Course, CourseCategory, CourseContent, CourseSection, Lecture, Review } = require('../schemas')
+const { Course, CourseCategory, CourseContent, CourseSection, Lecture, Review, User } = require('../schemas')
 // const { groupObjectByKey } = require('../utils/object')
 
 const getCourseCategoriesList = async (req, res, next) => {
@@ -15,7 +15,7 @@ const getCourseCategoriesList = async (req, res, next) => {
 
 const getCoursesListByCategory = async (req, res, next) => {
   let courses = await Course.find().populate('category', 'title').populate('reviews')
-    .select('title subtitle slug price language representativeTopic courseImage category reviews averageRating description')
+    .select('title subtitle slug price language representativeTopic learningGoals courseImage category reviews averageRating description')
   // courses = courses.map(c => ({
   //   ...c._doc,
   //   category: c._doc.category.title,
@@ -61,6 +61,8 @@ const getAllCourseLectures = async (req, res, next) => {
 
 const getCourseDetail = async (req, res, next) => {
   const queries = req.query
+  const userId = req.body.userId
+  console.log({ userId })
 
   const courseDoc = await Course.findOne(queries).populate('category', 'title').populate('reviews').populate({
     path: 'sections',
@@ -79,17 +81,51 @@ const getCourseDetail = async (req, res, next) => {
     }
   })
 
-  const course = courseDoc.toObject()
+  //calculate totalHours and totalLectures of all course sections
+  let course = courseDoc.toObject()
   course.totalHours = course.sections.reduce((totalHours, section) => totalHours + section.lectures.reduce((totalSectionHours, lecture) => {
     if (lecture.content.lectureContentType === 'VIDEO') {
       return totalSectionHours + lecture.content.video.duration
     }
     return totalSectionHours
-  }, 0), 0),
+  }, 0), 0)
+  course.totalLectures = course.sections.reduce((totalLectures, section) => totalLectures + section.lectures.length, 0)
 
-    course.totalLectures = course.sections.reduce((totalLectures, section) => totalLectures + section.lectures.length, 0)
+  let isPurchasedByUser = false
+  if (userId) {
+    const foundUser = await User.findById(userId)
+    if (foundUser) {
+      isPurchasedByUser = foundUser.myLearning.includes(course._id)
+    }
+  }
 
-  res.json({ course })
+  course.sections = course.sections.map(section => {
+    const updatedLectures = section.lectures.map(lecture => {
+      const type = lecture.content.lectureContentType
+      const updatedLecture = lecture
+      if (!isPurchasedByUser) {
+        lecture.isLocked = false
+        if (!lecture.canPreview) {
+          lecture.isLocked = true
+          if (type === 'VIDEO') {
+            delete updatedLecture.content.video.url
+            delete updatedLecture.content.video.alt
+          }
+          else if (type === 'ARTICLE') {
+            delete updatedLecture.content.articleContent
+          }
+        }
+      }
+      else {
+        lecture.isLocked = false
+
+      }
+      return updatedLecture
+    })
+    return { ...section, lectures: updatedLectures }
+  })
+
+  res.json({ isPurchasedByUser, course })
 }
 
 const createCourse = async (req, res, next) => {

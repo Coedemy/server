@@ -50,10 +50,13 @@ UserSchema.pre(
 UserSchema.post(
   'findOneAndUpdate',
   async function (data) {
-    console.log({ data })
     if (data.cart) {
       const cartItemsSet = [...new Set(data.cart)]
       data.cart = cartItemsSet
+    }
+    if (data.myLearning) {
+      const myLearningSet = [...new Set(data.myLearning)]
+      data.myLearning = myLearningSet
     }
     if (data.wishlist) {
       const duplicateCoursesId = findDuplicateItems(data.wishlist.map(course => course._id))
