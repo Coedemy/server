@@ -104,7 +104,8 @@ const loadCart = async (req, res, next) => {
         populate: {
           path: 'category',
         }
-      }).exec()
+      })
+      .exec()
     res.json({ cart: updatedUser.cart })
   }
   catch (err) {

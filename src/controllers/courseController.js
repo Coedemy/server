@@ -15,7 +15,16 @@ const getCourseCategoriesList = async (req, res, next) => {
 
 const getCoursesListByCategory = async (req, res, next) => {
   let courses = await Course.find().populate('category', 'title').populate('reviews')
-    .select('title subtitle slug price language representativeTopic learningGoals courseImage category reviews averageRating description')
+    .select('title subtitle slug price language representativeTopic learningGoals courseImage category reviews averageRating description sections')
+    .populate({
+      path: 'sections'
+    })
+  courses = courses.map(course => {
+    //get first lecture id
+    const courseWithFirstLecture = { ...course._doc, firstLecture: course.sections[0].lectures[0] }
+    delete courseWithFirstLecture.sections
+    return courseWithFirstLecture
+  })
   // courses = courses.map(c => ({
   //   ...c._doc,
   //   category: c._doc.category.title,
@@ -23,7 +32,7 @@ const getCoursesListByCategory = async (req, res, next) => {
   // }))
   res.json({
     total: courses.length,
-    courses
+    courses: courses
   })
 }
 
@@ -90,6 +99,7 @@ const getCourseDetail = async (req, res, next) => {
     return totalSectionHours
   }, 0), 0)
   course.totalLectures = course.sections.reduce((totalLectures, section) => totalLectures + section.lectures.length, 0)
+  course.firstLecture = course.sections[0].lectures[0]._id
 
   let isPurchasedByUser = false
   if (userId) {

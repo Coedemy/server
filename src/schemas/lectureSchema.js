@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const LectureSchema = new Schema({
-  title: String,
+  title: { type: String, default: '' },
   content: { type: Schema.Types.ObjectId, ref: 'lecture_contents' },
   resource: [{ type: Schema.Types.ObjectId, ref: 'lecture_resources', default: [] }],
   canPreview: { type: Boolean, default: false },

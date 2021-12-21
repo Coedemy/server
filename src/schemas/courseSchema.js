@@ -23,12 +23,13 @@ const CourseSchema = new Schema({
   congratulationsMessage: { type: String, default: '' },
   description: { type: String, default: '' },
   sections: [{ type: Schema.Types.ObjectId, ref: 'course_sections', default: [] }],
+  firstLecture: { type: Schema.Types.ObjectId, ref: 'lectures' },
   category: { type: Schema.Types.ObjectId, ref: 'course_categories' },
   instructors: { type: Schema.Types.ObjectId, ref: 'users' },
   isDeleted: { type: Boolean, default: false },
 }, {
   timestamps: true,
-  toJSON: { 
+  toJSON: {
     transform: function (doc, obj) {
       delete obj.isDeleted
       delete obj.__v
