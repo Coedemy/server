@@ -21,6 +21,7 @@ const UserSchema = new Schema({
   email: { type: String, trim: true, unique: true },
   password: { type: String },
   myLearning: [{ type: Schema.Types.ObjectId, ref: 'courses', default: [] }],
+  myTeaching: [{ type: Schema.Types.ObjectId, ref: 'courses', default: [] }],
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'courses', default: [] }],
   cart: [{ type: Schema.Types.ObjectId, ref: 'courses', default: [] }]
 }, {

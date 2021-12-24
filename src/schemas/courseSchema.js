@@ -13,7 +13,7 @@ const CourseSchema = new Schema({
   reviews: [{ type: Schema.Types.ObjectId, ref: 'reviews', default: [] }],
   averageRating: { type: Number, default: 0 },
   language: { type: String, default: '' },
-  target: [{ type: String, default: [] }],
+  target: [{ type: String, default: '' }],
   learningGoals: [{ type: String, default: [] }],
   prerequisites: [{ type: String, default: [] }],
   representativeTopic: { type: String, default: '' },
@@ -25,7 +25,7 @@ const CourseSchema = new Schema({
   sections: [{ type: Schema.Types.ObjectId, ref: 'course_sections', default: [] }],
   firstLecture: { type: Schema.Types.ObjectId, ref: 'lectures' },
   category: { type: Schema.Types.ObjectId, ref: 'course_categories' },
-  instructors: { type: Schema.Types.ObjectId, ref: 'users' },
+  instructor: { type: Schema.Types.ObjectId, ref: 'users' },
   isDeleted: { type: Boolean, default: false },
 }, {
   timestamps: true,
@@ -59,8 +59,9 @@ CourseSchema.post('findOneAndUpdate', async (data) => {
   const numberOfReviews = populatedReviews.length
 
   //calculate number of star when a new review was post
-  if (numberOfReviews.length === 0) return
-  if (numberOfReviews.length === 1)
+  console.log({ numberOfReviews })
+  if (numberOfReviews === 0) return
+  if (numberOfReviews === 1)
     data.averageRating = populatedReviews[numberOfReviews - 1].numberOfStars
   else {
     data.averageRating = ((numberOfReviews - 1) * data.averageRating + populatedReviews[numberOfReviews - 1].numberOfStars) / numberOfReviews

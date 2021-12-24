@@ -16,6 +16,8 @@ router.patch('/cart', requireAuth, userController.updateCart)
 
 router.patch('/favorite', requireAuth, userController.toggleFavorite)
 
+router.get('/teaching', requireAuth, userController.loadMyTeaching)
+
 router.get('/auth-user-properties', requireAuth, userController.loadAuthUserProperties)
 
 router.get('/:id', userController.getUser)

@@ -93,6 +93,7 @@ const loadCart = async (req, res, next) => {
   const user = req.user
   const { cart } = req.body
 
+  console.log({ body: req })
   try {
     const courseIdList = cart.map(course => course._id)
     const updatedUser = await User.findOneAndUpdate(
@@ -159,6 +160,21 @@ const loadAuthUserProperties = async (req, res, next) => {
   }
 }
 
+const loadMyTeaching = async (req, res, next) => {
+  const user = req.user
+
+  try {
+    const { myTeaching } = await User.findById(user.id)
+      .populate({ path: 'myTeaching', populate: { path: 'category' } })
+      .select('myTeaching')
+
+    res.json({ myTeaching })
+  }
+  catch (err) {
+    next(err)
+  }
+}
+
 module.exports = {
   getAllUsers,
   getUser,
@@ -168,5 +184,6 @@ module.exports = {
   loadAuthUserProperties,
   loadCart,
   updateCart,
-  toggleFavorite
+  toggleFavorite,
+  loadMyTeaching
 }

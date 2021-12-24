@@ -5,5 +5,6 @@ module.exports = {
   orderRoutes: require('./orderRoutes'),
   quizRoutes: require('./quizRoutes'),
   reviewRoutes: require('./reviewRoutes'),
-  userRoutes: require('./userRoutes')
+  userRoutes: require('./userRoutes'),
+  videoRoutes: require('./videoRoutes')
 }

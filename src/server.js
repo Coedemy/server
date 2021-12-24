@@ -17,7 +17,7 @@ const { connectToMongoDb } = require('./helpers/database')
 //handle middlewares
 app.use('/storage', express.static(__dirname + '/storage'))
 app.use(morgan('dev'))
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(cors())
 
@@ -33,7 +33,7 @@ initServer()
 
 //use routers
 const {
-  authRoutes, courseRoutes, lectureRoutes, orderRoutes, quizRoutes, reviewRoutes, userRoutes
+  authRoutes, courseRoutes, lectureRoutes, orderRoutes, quizRoutes, reviewRoutes, userRoutes, videoRoutes
 } = require('./routes')
 
 app.get('/', (req, res) => {
@@ -46,6 +46,7 @@ app.use('/orders', orderRoutes)
 app.use('/quizes', quizRoutes)
 app.use('/reviewes', reviewRoutes)
 app.use('/users', userRoutes)
+app.use('/videos', videoRoutes)
 
 //handle errors
 const {

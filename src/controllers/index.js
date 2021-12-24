@@ -5,5 +5,6 @@ module.exports = {
   lectureController: require('./lectureController'),
   orderController: require('./orderController'),
   quizController: require('./quizController'),
-  reviewController: require('./reviewController')
+  reviewController: require('./reviewController'),
+  videoController: require('./videoController')
 }

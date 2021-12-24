@@ -1,7 +1,12 @@
 const _ = require('lodash')
-
 const { ObjectId } = require('mongodb')
-const { Course, CourseCategory, CourseContent, CourseSection, Lecture, Review, User } = require('../schemas')
+const fs = require('fs')
+const util = require('util')
+const slugify = require('slugify')
+const unlinkFile = util.promisify(fs.unlink)
+
+const { uploadFileToS3, getSignedUrl } = require('../helpers/upload')
+const { Course, CourseCategory, CourseSection, Lecture, Review, User } = require('../schemas')
 // const { groupObjectByKey } = require('../utils/object')
 
 const getCourseCategoriesList = async (req, res, next) => {
@@ -21,9 +26,11 @@ const getCoursesListByCategory = async (req, res, next) => {
     })
   courses = courses.map(course => {
     //get first lecture id
-    const courseWithFirstLecture = { ...course._doc, firstLecture: course.sections[0].lectures[0] }
-    delete courseWithFirstLecture.sections
-    return courseWithFirstLecture
+    if (course.sections.length > 0) {
+      const courseWithFirstLecture = { ...course._doc, firstLecture: course.sections[0]?.lectures[0] }
+      delete courseWithFirstLecture.sections
+      return courseWithFirstLecture
+    }
   })
   // courses = courses.map(c => ({
   //   ...c._doc,
@@ -91,6 +98,7 @@ const getCourseDetail = async (req, res, next) => {
   })
 
   //calculate totalHours and totalLectures of all course sections
+  if (!courseDoc) return res.status(200).json({})
   let course = courseDoc.toObject()
   course.totalHours = course.sections.reduce((totalHours, section) => totalHours + section.lectures.reduce((totalSectionHours, lecture) => {
     if (lecture.content.lectureContentType === 'VIDEO') {
@@ -128,7 +136,6 @@ const getCourseDetail = async (req, res, next) => {
       }
       else {
         lecture.isLocked = false
-
       }
       return updatedLecture
     })
@@ -140,19 +147,17 @@ const getCourseDetail = async (req, res, next) => {
 
 const createCourse = async (req, res, next) => {
   // courseImage, promotionVideo, rating
-  const {
-    title, subtitle, price, language, target, learningGoals, prerequisites,
-    representativeTopic, welcomeMessage, congratulationsMessage, description,
-    category, content
-  } = req.body
+  const { title, category } = req.body
+  const userId = req.user.id
 
-  const newCourse = await Course.create({
-    title, subtitle, price, language, target, learningGoals, prerequisites,
-    representativeTopic, welcomeMessage, congratulationsMessage, description,
-    category, content
-  })
+  const newCourse = await Course.create({ title, category, instructor: userId, slug: slugify(title, { lower: true }) })
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: ObjectId(userId) },
+    { $push: { myTeaching: newCourse._id } },
+    { new: true }
+  )
 
-  res.status(201).json({ newCourse })
+  res.status(201).json({ course: newCourse })
 }
 
 const importManyCourses = async (req, res, next) => {
@@ -206,7 +211,28 @@ const reviewCourse = async (req, res, next) => {
 }
 
 const updateCourse = async (req, res, next) => {
-  res.json('update course')
+  const { courseImage, promotionVideo } = req.files
+  const courseId = req.params.id
+
+  const courseImageResult = await uploadFileToS3(courseImage[0])
+  await unlinkFile(courseImage[0].path)
+
+  const promotionVideoResult = await uploadFileToS3(promotionVideo[0])
+  await unlinkFile(promotionVideo[0].path)
+
+  const updatedCourse = await Course.findOneAndUpdate(
+    { _id: ObjectId(courseId) },
+    {
+      $set: {
+        courseImage: getSignedUrl({ key: courseImageResult.Key }),
+        promotionVideo: getSignedUrl({ key: promotionVideoResult.Key }),
+        ...req.body
+      }
+    },
+    { new: true }
+  )
+
+  res.json({ updatedCourse })
 }
 
 const removeCourse = async (req, res, next) => {

@@ -3,6 +3,7 @@ const router = express.Router()
 
 const { courseController } = require('../controllers')
 const { requireAuth } = require('../middlewares/require_auth')
+const { uploadMultipleFiles } = require('../helpers/upload')
 
 router.get('/categories', courseController.getCourseCategoriesList)
 
@@ -20,7 +21,7 @@ router.post('/search', courseController.searchCourses)
 
 router.get('/', courseController.getCoursesListByCategory)
 
-router.post('/', courseController.createCourse)
+router.post('/', requireAuth, courseController.createCourse)
 
 router.post('/many', courseController.importManyCourses)
 
@@ -32,7 +33,7 @@ router.post('/:id/add-to-cart', requireAuth, courseController.addCourseToCart)
 
 router.post('/:id/remove-from-cart', requireAuth, courseController.removeCourseFromCart)
 
-router.patch('/:id', courseController.updateCourse)
+router.patch('/:id', requireAuth, uploadMultipleFiles(['courseImage', 'promotionVideo']), courseController.updateCourse)
 
 router.delete('/:id', courseController.removeCourse)
 
