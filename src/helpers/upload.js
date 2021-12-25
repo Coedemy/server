@@ -47,11 +47,10 @@ function uploadFileToS3(file) {
 }
 
 const getSignedUrl = ({ key, expires }) => {
-  console.log({ key })
   const signedUrl = s3.getSignedUrl('getObject', {
     Key: key,
     Bucket: bucketName,
-    Expires: expires || 9000, // S3 default is 900 seconds (15 minutes)
+    Expires: expires || 900000, // S3 default is 900 seconds (15 minutes)
   })
 
   return signedUrl

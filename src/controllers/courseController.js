@@ -24,6 +24,7 @@ const getCoursesListByCategory = async (req, res, next) => {
     .populate({
       path: 'sections'
     })
+  console.log({ course: courses[12] })
   courses = courses.map(course => {
     //get first lecture id
     if (course.sections.length > 0) {
@@ -31,6 +32,7 @@ const getCoursesListByCategory = async (req, res, next) => {
       delete courseWithFirstLecture.sections
       return courseWithFirstLecture
     }
+    return course
   })
   // courses = courses.map(c => ({
   //   ...c._doc,
@@ -78,7 +80,6 @@ const getAllCourseLectures = async (req, res, next) => {
 const getCourseDetail = async (req, res, next) => {
   const queries = req.query
   const userId = req.body.userId
-  console.log({ userId })
 
   const courseDoc = await Course.findOne(queries).populate('category', 'title').populate('reviews').populate({
     path: 'sections',
@@ -107,7 +108,7 @@ const getCourseDetail = async (req, res, next) => {
     return totalSectionHours
   }, 0), 0)
   course.totalLectures = course.sections.reduce((totalLectures, section) => totalLectures + section.lectures.length, 0)
-  course.firstLecture = course.sections[0].lectures[0]._id
+  course.firstLecture = course.sections[0]?.lectures[0]._id
 
   let isPurchasedByUser = false
   if (userId) {
@@ -211,23 +212,30 @@ const reviewCourse = async (req, res, next) => {
 }
 
 const updateCourse = async (req, res, next) => {
-  const { courseImage, promotionVideo } = req.files
   const courseId = req.params.id
+  const updateOptions = { ...req.body }
+  console.log({ updateOptions })
 
-  const courseImageResult = await uploadFileToS3(courseImage[0])
-  await unlinkFile(courseImage[0].path)
+  if (req.files) {
+    const { courseImage, promotionVideo } = req.files
 
-  const promotionVideoResult = await uploadFileToS3(promotionVideo[0])
-  await unlinkFile(promotionVideo[0].path)
+    if (courseImage) {
+      const courseImageResult = await uploadFileToS3(courseImage[0])
+      await unlinkFile(courseImage[0].path)
+      updateOptions['courseImage'] = getSignedUrl({ key: courseImageResult.Key })
+    }
+
+    if (promotionVideo) {
+      const promotionVideoResult = await uploadFileToS3(promotionVideo[0])
+      await unlinkFile(promotionVideo[0].path)
+      updateOptions['promotionVideo'] = getSignedUrl({ key: promotionVideoResult.Key })
+    }
+  }
 
   const updatedCourse = await Course.findOneAndUpdate(
     { _id: ObjectId(courseId) },
     {
-      $set: {
-        courseImage: getSignedUrl({ key: courseImageResult.Key }),
-        promotionVideo: getSignedUrl({ key: promotionVideoResult.Key }),
-        ...req.body
-      }
+      $set: { ...updateOptions }
     },
     { new: true }
   )

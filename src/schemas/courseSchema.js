@@ -19,6 +19,7 @@ const CourseSchema = new Schema({
   representativeTopic: { type: String, default: '' },
   courseImage: { type: String, default: '' },
   promotionVideo: { type: String, default: '' },
+  level: { type: String, default: '' },
   welcomeMessage: { type: String, default: '' },
   congratulationsMessage: { type: String, default: '' },
   description: { type: String, default: '' },

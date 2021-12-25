@@ -93,7 +93,6 @@ const loadCart = async (req, res, next) => {
   const user = req.user
   const { cart } = req.body
 
-  console.log({ body: req })
   try {
     const courseIdList = cart.map(course => course._id)
     const updatedUser = await User.findOneAndUpdate(
