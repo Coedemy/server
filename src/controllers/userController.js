@@ -152,7 +152,7 @@ const loadAuthUserProperties = async (req, res, next) => {
       .populate({ path: 'wishlist', populate: { path: 'category' } })
       .populate({ path: 'myLearning', populate: { path: 'category' } })
 
-    res.json({ wishlist: foundUser.wishlist, myLearning: foundUser.myLearning })
+    res.json({ wishlist: foundUser.wishlist, myLearning: foundUser.myLearning, myLearningProcess: foundUser.learnedLectures })
   }
   catch (err) {
     next(err)
@@ -174,6 +174,19 @@ const loadMyTeaching = async (req, res, next) => {
   }
 }
 
+const learnALecture = async (req, res, next) => {
+  const user = req.user
+
+  const lectureId = req.body.lectureId
+
+  await User.findOneAndUpdate(
+    { _id: ObjectId(user.id) },
+    { $push: { learnedLectures: lectureId } },
+    { new: true }
+  )
+  res.json({ lectureId })
+}
+
 module.exports = {
   getAllUsers,
   getUser,
@@ -184,5 +197,6 @@ module.exports = {
   loadCart,
   updateCart,
   toggleFavorite,
-  loadMyTeaching
+  loadMyTeaching,
+  learnALecture
 }

@@ -20,6 +20,8 @@ router.get('/teaching', requireAuth, userController.loadMyTeaching)
 
 router.get('/auth-user-properties', requireAuth, userController.loadAuthUserProperties)
 
+router.post('/learn/:lectureId', requireAuth, userController.learnALecture)
+
 router.get('/:id', userController.getUser)
 
 router.patch('/profile', uploadMultipleFiles(["avatar", "coverPicture"]), userController.updateUser)
