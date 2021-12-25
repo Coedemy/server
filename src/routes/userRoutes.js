@@ -24,7 +24,7 @@ router.post('/learn/:lectureId', requireAuth, userController.learnALecture)
 
 router.get('/:id', userController.getUser)
 
-router.patch('/profile', uploadMultipleFiles(["avatar", "coverPicture"]), userController.updateUser)
+router.patch('/profile', uploadMultipleFiles(['avatar', 'coverPicture']), userController.updateUser)
 
 router.get('/profile/:key', userController.getCoverPicture)
 

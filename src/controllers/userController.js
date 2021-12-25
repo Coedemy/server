@@ -177,8 +177,9 @@ const loadMyTeaching = async (req, res, next) => {
 const learnALecture = async (req, res, next) => {
   const user = req.user
 
-  const lectureId = req.body.lectureId
+  const lectureId = req.params.lectureId
 
+  console.log({ lectureId })
   await User.findOneAndUpdate(
     { _id: ObjectId(user.id) },
     { $push: { learnedLectures: lectureId } },

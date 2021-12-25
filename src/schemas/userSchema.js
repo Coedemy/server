@@ -60,6 +60,10 @@ UserSchema.post(
       const myLearningSet = [...new Set(data.myLearning)]
       data.myLearning = myLearningSet
     }
+    if (data.learnedLectures) {
+      const learnedLecturesSet = [...new Set(data.learnedLectures.map(l => l.toString()))]
+      data.learnedLectures = learnedLecturesSet
+    }
     if (data.wishlist) {
       const duplicateCoursesId = findDuplicateItems(data.wishlist.map(course => course._id))
       data.wishlist = data.wishlist.filter(course => !duplicateCoursesId.includes(course._id))
