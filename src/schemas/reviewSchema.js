@@ -16,6 +16,7 @@ const ReviewSchema = new Schema({
       delete obj.__v
       return obj
     }
-  } })
+  }
+})
 
 module.exports = mongoose.model('reviews', ReviewSchema)

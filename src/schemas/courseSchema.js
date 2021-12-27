@@ -46,10 +46,6 @@ const CourseSchema = new Schema({
   }
 })
 
-// CourseSchema.methods.calculate = function () {
-//   const a = this.populate()
-// }
-
 CourseSchema.post('findOneAndUpdate', async (data) => {
 
   //populate all reviews by _id

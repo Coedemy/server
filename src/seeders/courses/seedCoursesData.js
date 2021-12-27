@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const slugify = require('slugify')
 
 const { Course, CourseCategory, CourseSection, Video, Lecture, LectureContent } = require('../../schemas')
@@ -37,6 +38,8 @@ const createCourseSections = async () => {
 }
 
 const seedCoursesData = async () => {
+  const courseCount = await Course.count()
+  if (courseCount !== 0) return
 
   const sections = await createCourseSections()
 

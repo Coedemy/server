@@ -24,7 +24,6 @@ const getCoursesListByCategory = async (req, res, next) => {
     .populate({
       path: 'sections'
     })
-  console.log({ course: courses[12] })
   courses = courses.map(course => {
     //get first lecture id
     if (course.sections.length > 0) {
@@ -186,7 +185,6 @@ const importManyCourses = async (req, res, next) => {
 
 const importManyCategories = async (req, res, next) => {
   const importedCategories = req.body.categories
-  console.log({ importedCategories })
   const importedCategoryDocs = []
 
   for (let category of importedCategories) {
@@ -200,21 +198,40 @@ const importManyCategories = async (req, res, next) => {
 
 const reviewCourse = async (req, res, next) => {
   const courseId = req.params.id
-  const { numberOfStars, comment, reviewer } = req.body
-  const newReview = await Review.create({ numberOfStars, comment, reviewer })
+  const user = req.user
 
-  const updatedCourse = await Course.findOneAndUpdate(
+  const { numberOfStars, comment, reviewer } = req.body
+  // const foundReview = await Review.findOne({
+  //   _id: courseId,
+  //   reviewer: user.id
+  // })
+
+  // console.log({ foundReview, courseId })
+  // if (foundReview) {
+  //   const updatedReview = await Review.findOneAndUpdate(
+  //     { _id: courseId, reviewer: user.id },
+  //     { $set: { numberOfStars, comment } }
+  //   )
+  //   return res.json({ review: updatedReview })
+  // }
+
+  //new review
+  const newReview = await Review.create({ numberOfStars, comment, reviewer: user.id })
+
+  console.log({ newReview })
+
+  await Course.findOneAndUpdate(
     { _id: ObjectId(courseId) },
     { $push: { reviews: newReview } },
     { new: true }
   )
-  res.json({ updatedCourse })
+
+  res.json({ review: newReview })
 }
 
 const updateCourse = async (req, res, next) => {
   const courseId = req.params.id
   const updateOptions = { ...req.body }
-  console.log({ updateOptions })
 
   if (req.files) {
     const { courseImage, promotionVideo } = req.files
