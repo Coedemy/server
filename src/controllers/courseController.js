@@ -7,7 +7,6 @@ const unlinkFile = util.promisify(fs.unlink)
 
 const { uploadFileToS3, getSignedUrl } = require('../helpers/upload')
 const { Course, CourseCategory, CourseSection, Lecture, Review, User } = require('../schemas')
-// const { groupObjectByKey } = require('../utils/object')
 
 const getCourseCategoriesList = async (req, res, next) => {
   const courseCategoryList = await CourseCategory.find()
@@ -20,19 +19,20 @@ const getCourseCategoriesList = async (req, res, next) => {
 
 const getCoursesListByCategory = async (req, res, next) => {
   let courses = await Course.find().populate('category', 'title').populate('reviews')
-    .select('title subtitle slug price language representativeTopic learningGoals courseImage category reviews averageRating description sections')
+    .select('title subtitle slug price language representativeTopic learningGoals courseImage category reviews averageRating description sections isPublished')
     .populate({
       path: 'sections'
     })
-  courses = courses.map(course => {
-    //get first lecture id
-    if (course.sections.length > 0) {
+  courses = courses
+    // .filter(course => course.isPublished)
+    .map(course => {
+      //get first lecture id
+      if (course.sections.length <= 0) return course
       const courseWithFirstLecture = { ...course._doc, firstLecture: course.sections[0]?.lectures[0] }
       delete courseWithFirstLecture.sections
       return courseWithFirstLecture
-    }
-    return course
-  })
+    })
+
   // courses = courses.map(c => ({
   //   ...c._doc,
   //   category: c._doc.category.title,
@@ -248,6 +248,8 @@ const updateCourse = async (req, res, next) => {
       updateOptions['promotionVideo'] = getSignedUrl({ key: promotionVideoResult.Key })
     }
   }
+
+  console.log({ updateOptions })
 
   const updatedCourse = await Course.findOneAndUpdate(
     { _id: ObjectId(courseId) },

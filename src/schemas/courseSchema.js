@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const slugify = require('slugify')
 
 const ReviewSchema = require('./reviewSchema')
+const { defaultCourseImageUrl } = require('../constants')
 
 const Schema = mongoose.Schema
 
@@ -17,7 +18,7 @@ const CourseSchema = new Schema({
   learningGoals: [{ type: String, default: [] }],
   prerequisites: [{ type: String, default: [] }],
   representativeTopic: { type: String, default: '' },
-  courseImage: { type: String, default: '' },
+  courseImage: { type: String, default: defaultCourseImageUrl },
   promotionVideo: { type: String, default: '' },
   level: { type: String, default: '' },
   welcomeMessage: { type: String, default: '' },
@@ -27,6 +28,7 @@ const CourseSchema = new Schema({
   firstLecture: { type: Schema.Types.ObjectId, ref: 'lectures' },
   category: { type: Schema.Types.ObjectId, ref: 'course_categories' },
   instructor: { type: Schema.Types.ObjectId, ref: 'users' },
+  isPublished: { type: Boolean, default: false },
   isDeleted: { type: Boolean, default: false },
 }, {
   timestamps: true,

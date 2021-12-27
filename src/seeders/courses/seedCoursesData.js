@@ -50,6 +50,7 @@ const seedCoursesData = async () => {
       course.slug = slugify(course.title, { lower: true })
       course.category = categoryDoc._id
       course.sections = pickRandomElementsFromArray(sections, 6)
+      course.isPublished = true
       Course.create(course)
     }
   }
