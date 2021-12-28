@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const LectureContentType = {
+  EMPTY: 'EMPTY',
   VIDEO: 'VIDEO',
   ARTICLE: 'ARTICLE',
   QUIZ: 'QUIZ'
@@ -11,7 +12,7 @@ exports.LectureContentType = LectureContentType
 const Schema = mongoose.Schema
 
 const LectureContentSchema = new Schema({
-  lectureContentType: { type: LectureContentType, defaultValue: LectureContentType.ARTICLE },
+  lectureContentType: { type: LectureContentType, defaultValue: LectureContentType.EMPTY },
   articleContent: { type: String, default: '' },
   video: { type: Schema.Types.ObjectId, ref: 'videos' },
   quizzesList: [{ type: Schema.Types.ObjectId, ref: 'quizzes', default: [] }],

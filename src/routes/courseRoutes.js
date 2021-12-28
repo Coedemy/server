@@ -25,9 +25,19 @@ router.post('/', requireAuth, courseController.createCourse)
 
 router.post('/many', courseController.importManyCourses)
 
-router.post('/:id/review', requireAuth, courseController.reviewCourse)
+router.post('/sections/:sectionId/lectures', requireAuth, courseController.createLecture)
+
+router.patch('/sections/:sectionId/reorder', requireAuth, courseController.updateLecturesOrder)
 
 router.post('/detail', courseController.getCourseDetail)
+
+router.post('/:id/sections', requireAuth, courseController.createSection)
+
+router.patch('/:id/reorder', requireAuth, courseController.updateSectionsOrder)
+
+router.post('/:id/review', requireAuth, courseController.reviewCourse)
+
+router.get('/:id/sections', courseController.getCourseSections)
 
 router.post('/:id/add-to-cart', requireAuth, courseController.addCourseToCart)
 
@@ -35,6 +45,6 @@ router.post('/:id/remove-from-cart', requireAuth, courseController.removeCourseF
 
 router.patch('/:id', requireAuth, uploadMultipleFiles(['courseImage', 'promotionVideo']), courseController.updateCourse)
 
-router.delete('/:id', courseController.removeCourse)
+router.delete('/:id', requireAuth, courseController.removeCourse)
 
 module.exports = router

@@ -461,19 +461,7 @@ const coursesSeeder = () => {
         ]
       },
       {
-        title: "Business",
-        courses: [
-
-        ]
-      },
-      {
         title: "Finanace & Accounting",
-        courses: [
-
-        ]
-      },
-      {
-        title: "Business",
         courses: [
 
         ]

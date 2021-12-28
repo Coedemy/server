@@ -51,6 +51,7 @@ const CourseSchema = new Schema({
 CourseSchema.post('findOneAndUpdate', async (data) => {
 
   //populate all reviews by _id
+  if (!data) return
   const populatedReviews = await ReviewSchema.find({
     _id: { $in: data.reviews }
   })
@@ -66,6 +67,7 @@ CourseSchema.post('findOneAndUpdate', async (data) => {
     data.averageRating = ((numberOfReviews - 1) * data.averageRating + populatedReviews[numberOfReviews - 1].numberOfStars) / numberOfReviews
   }
   data.averageRating = data.averageRating.toFixed(1)
+
   data.save()
 })
 

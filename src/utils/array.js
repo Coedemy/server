@@ -8,7 +8,16 @@ const pickRandomElementsFromArray = (array, numberOfElement) => {
 
 const findDuplicateItems = array => array.filter((item, index) => array.indexOf(item) !== index)
 
+const swapTwoElementsInArray = (arr, pos1, pos2) => {
+  const resultArr = [...arr]
+  const temp = resultArr[pos1]
+  resultArr[pos1] = resultArr[pos2]
+  resultArr[pos2] = temp
+  return resultArr
+}
+
 module.exports = {
   pickRandomElementsFromArray,
-  findDuplicateItems
+  findDuplicateItems,
+  swapTwoElementsInArray
 }

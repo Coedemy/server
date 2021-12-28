@@ -6,7 +6,8 @@ const slugify = require('slugify')
 const unlinkFile = util.promisify(fs.unlink)
 
 const { uploadFileToS3, getSignedUrl } = require('../helpers/upload')
-const { Course, CourseCategory, CourseSection, Lecture, Review, User } = require('../schemas')
+const { swapTwoElementsInArray } = require('../utils/array')
+const { Course, CourseCategory, CourseSection, Lecture, LectureContent, Review, User } = require('../schemas')
 
 const getCourseCategoriesList = async (req, res, next) => {
   const courseCategoryList = await CourseCategory.find()
@@ -107,7 +108,7 @@ const getCourseDetail = async (req, res, next) => {
     return totalSectionHours
   }, 0), 0)
   course.totalLectures = course.sections.reduce((totalLectures, section) => totalLectures + section.lectures.length, 0)
-  course.firstLecture = course.sections[0]?.lectures[0]._id
+  course.firstLecture = course.sections[0]?.lectures[0]?._id
 
   let isPurchasedByUser = false
   if (userId) {
@@ -249,8 +250,6 @@ const updateCourse = async (req, res, next) => {
     }
   }
 
-  console.log({ updateOptions })
-
   const updatedCourse = await Course.findOneAndUpdate(
     { _id: ObjectId(courseId) },
     {
@@ -280,9 +279,97 @@ const removeCourseFromCart = async (req, res, next) => {
   res.json({ user, courseId })
 }
 
+const getCourseSections = async (req, res, next) => {
+  const { id } = req.params
+  console.log('get course sectiosn')
+
+  const course = await Course.findById(id)
+    .populate({
+      path: 'sections',
+      // select: '_id title lectures',
+      populate: {
+        path: 'lectures',
+        // select: '_id title',
+        populate: 'lecture_contents'
+      }
+    })
+
+  res.json({ courseSections: course.sections })
+}
+
+const createSection = async (req, res, next) => {
+  const { id } = req.params
+  const { title } = req.body
+  const userId = req.user.id
+  const newSection = await CourseSection.create({ title, instructor: userId })
+
+  await Course.findOneAndUpdate(
+    { _id: id },
+    { $push: { sections: newSection._id } },
+    { new: true }
+  )
+
+  res.status(201).json({ newSection })
+}
+
+const deleteSection = async (req, res, next) => {
+
+}
+
+const updateSectionContent = async (req, res, next) => {
+
+}
+
+const updateSectionsOrder = async (req, res, next) => {
+  const { sourceIndex, destIndex } = req.body
+  const { id: courseId } = req.params
+
+  const course = await Course.findById(courseId)
+  course.sections = swapTwoElementsInArray(course.sections, sourceIndex, destIndex)
+  course.save()
+  res.json({})
+}
+
+const createLecture = async (req, res, next) => {
+  const { sectionId } = req.params
+  const { title } = req.body
+  const lectureContent = await LectureContent.create({})
+  const newLecture = await Lecture.create({ title, content: lectureContent._id })
+
+
+  const section = await CourseSection.findOneAndUpdate(
+    { _id: sectionId },
+    { $push: { lectures: newLecture._id } },
+    { new: true }
+  )
+
+  res.status(201).json({ newLecture, section })
+}
+
+const deleteLecture = async (req, res, next) => {
+
+}
+
+const updateLectureContent = async (req, res, next) => {
+
+}
+
+const updateLecturesOrder = async (req, res, next) => {
+  const { sourceIndex, destIndex } = req.body
+  const { sectionId } = req.params
+
+  const section = await CourseSection.findById(sectionId)
+  section.lectures = swapTwoElementsInArray(section.lectures, sourceIndex, destIndex)
+  section.save()
+  res.json({})
+}
+
+
 module.exports = {
   getCourseCategoriesList, getCoursesListByCategory, getAllCourseSections,
   getHighRatingCoursesList, getBestSellerCoursesList, getAllCourseLectures,
   getCourseDetail, searchCourses, reviewCourse, addCourseToCart, removeCourseFromCart,
-  createCourse, updateCourse, removeCourse, importManyCourses, importManyCategories
+  createCourse, updateCourse, removeCourse, importManyCourses, importManyCategories,
+  createSection, deleteSection, updateSectionContent, updateSectionsOrder,
+  createLecture, deleteLecture, updateLectureContent, updateLecturesOrder, getCourseSections
 }
