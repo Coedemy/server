@@ -13,12 +13,12 @@ const createCourseSections = async () => {
     for (let lecture of section.lectures) {
       //handle if lecture is video
       let lectureContentDoc
-      if (lecture.content.lectureContentType === "VIDEO") {
+      if (lecture.content.lectureContentType === 'VIDEO') {
         const videoDoc = await Video.create(lecture.content.video)
         videoId = videoDoc._id
         lectureContentDoc = await LectureContent.create({ ...lecture.content, video: videoId })
       }
-      else if (lecture.content.lectureContentType === "ARTICLE") {
+      else if (lecture.content.lectureContentType === 'ARTICLE') {
         lectureContentDoc = await LectureContent.create({ ...lecture.content, articleContent: lecture.content.articleContent })
       }
 

@@ -29,7 +29,11 @@ router.post('/sections/:sectionId/lectures', requireAuth, courseController.creat
 
 router.patch('/sections/:sectionId/reorder', requireAuth, courseController.updateLecturesOrder)
 
+router.post('/lectures/:lectureId', requireAuth, uploadMultipleFiles(['contentFile', 'resourceFile']), courseController.updateLectureContent)
+
 router.post('/detail', courseController.getCourseDetail)
+
+router.post('/:id/publish', requireAuth, courseController.togglePublishCourse)
 
 router.post('/:id/sections', requireAuth, courseController.createSection)
 

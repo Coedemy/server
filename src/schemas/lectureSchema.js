@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 const LectureSchema = new Schema({
   title: { type: String, default: '' },
   content: { type: Schema.Types.ObjectId, ref: 'lecture_contents' },
-  resource: [{ type: Schema.Types.ObjectId, ref: 'lecture_resources', default: [] }],
+  resource: { type: Schema.Types.ObjectId, ref: 'lecture_resources' },
   canPreview: { type: Boolean, default: false },
   isDeleted: { type: Boolean, default: false }
 }, {

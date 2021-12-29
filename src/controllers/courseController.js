@@ -7,7 +7,7 @@ const unlinkFile = util.promisify(fs.unlink)
 
 const { uploadFileToS3, getSignedUrl } = require('../helpers/upload')
 const { swapTwoElementsInArray } = require('../utils/array')
-const { Course, CourseCategory, CourseSection, Lecture, LectureContent, Review, User } = require('../schemas')
+const { Course, CourseCategory, CourseSection, Lecture, LectureContent, LectureResource, Video, Review, User } = require('../schemas')
 
 const getCourseCategoriesList = async (req, res, next) => {
   const courseCategoryList = await CourseCategory.find()
@@ -20,12 +20,14 @@ const getCourseCategoriesList = async (req, res, next) => {
 
 const getCoursesListByCategory = async (req, res, next) => {
   let courses = await Course.find().populate('category', 'title').populate('reviews')
-    .select('title subtitle slug price language representativeTopic learningGoals courseImage category reviews averageRating description sections isPublished')
+    .select('title subtitle slug price language representativeTopic learningGoals courseImage category reviews averageRating description sections isPublished instructor')
+    .populate('sections')
     .populate({
-      path: 'sections'
+      path: 'instructor',
+      select: '_id username email'
     })
   courses = courses
-    // .filter(course => course.isPublished)
+    .filter(course => course.isPublished)
     .map(course => {
       //get first lecture id
       if (course.sections.length <= 0) return course
@@ -286,11 +288,12 @@ const getCourseSections = async (req, res, next) => {
   const course = await Course.findById(id)
     .populate({
       path: 'sections',
-      // select: '_id title lectures',
       populate: {
         path: 'lectures',
-        // select: '_id title',
-        populate: 'lecture_contents'
+        populate: {
+          path: 'content resource',
+          populate: 'video'
+        }
       }
     })
 
@@ -333,9 +336,9 @@ const updateSectionsOrder = async (req, res, next) => {
 const createLecture = async (req, res, next) => {
   const { sectionId } = req.params
   const { title } = req.body
-  const lectureContent = await LectureContent.create({})
-  const newLecture = await Lecture.create({ title, content: lectureContent._id })
-
+  const lectureContent = await LectureContent.create({ lectureContentType: 'EMPTY' })
+  const lectureResource = await LectureResource.create({ lectureResourceType: 'EMPTY' })
+  const newLecture = await Lecture.create({ title, content: lectureContent._id, resource: lectureResource._id })
 
   const section = await CourseSection.findOneAndUpdate(
     { _id: sectionId },
@@ -351,7 +354,64 @@ const deleteLecture = async (req, res, next) => {
 }
 
 const updateLectureContent = async (req, res, next) => {
+  const { lectureId } = req.params
+  const { title, canPreview, contentType, resourceType, resourceContent } = req.body
+  const { contentFile, resourceFile } = req.files
 
+  const lecture = await Lecture.findById(lectureId)
+
+  if (title) lecture['title'] = title || ''
+  if (canPreview) lecture['canPreview'] = canPreview
+  lecture.save()
+
+  //handle content
+  if (contentType === 'VIDEO') {
+    if (contentFile) {
+      const contentResult = await uploadFileToS3(contentFile[0])
+      await unlinkFile(contentFile[0].path)
+
+      const videoDoc = await Video.create({ url: getSignedUrl({ key: contentResult.Key }), title: contentFile[0].filename })
+      await LectureContent.findOneAndUpdate(
+        { _id: lecture.content },
+        { lectureContentType: 'VIDEO', video: videoDoc._id },
+        { new: true }
+      )
+    }
+  }
+  else if (contentType === 'ARTICLE') {
+    console.log('ARTICLE')
+  }
+
+  //handle resource
+  if (resourceType === 'DOWNLOADABLE_FILE') {
+    if (resourceFile) {
+      const resourceResult = await uploadFileToS3(resourceFile[0])
+      await unlinkFile(resourceFile[0].path)
+
+      await LectureResource.findOneAndUpdate(
+        { _id: lecture.resource },
+        {
+          lectureResourceType: 'DOWNLOADABLE_FILE',
+          title: resourceFile[0].filename,
+          resourceUrl: getSignedUrl({ key: resourceResult.Key })
+        },
+        { new: true }
+      )
+    }
+  }
+  else if (resourceType === 'EXTERNAL_RESOURCE') {
+    await LectureResource.findOneAndUpdate(
+      { _id: lecture.resource },
+      {
+        lectureResourceType: 'EXTERNAL_RESOURCE',
+        title: resourceContent.title,
+        resourceUrl: resourceContent.url
+      },
+      { new: true }
+    )
+  }
+
+  res.json({})
 }
 
 const updateLecturesOrder = async (req, res, next) => {
@@ -364,12 +424,21 @@ const updateLecturesOrder = async (req, res, next) => {
   res.json({})
 }
 
+const togglePublishCourse = async (req, res, next) => {
+  const { id } = req.params
+
+  const course = await Course.findById(id)
+  course.isPublished = !course.isPublished
+  course.save()
+
+  res.json({ course })
+}
 
 module.exports = {
   getCourseCategoriesList, getCoursesListByCategory, getAllCourseSections,
   getHighRatingCoursesList, getBestSellerCoursesList, getAllCourseLectures,
   getCourseDetail, searchCourses, reviewCourse, addCourseToCart, removeCourseFromCart,
   createCourse, updateCourse, removeCourse, importManyCourses, importManyCategories,
-  createSection, deleteSection, updateSectionContent, updateSectionsOrder,
+  createSection, deleteSection, updateSectionContent, updateSectionsOrder, togglePublishCourse,
   createLecture, deleteLecture, updateLectureContent, updateLecturesOrder, getCourseSections
 }

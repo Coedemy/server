@@ -20,7 +20,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -41,7 +41,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.sintelTrailer,
-                alt: 'sintelTrailer',
+                title: 'sintelTrailer',
                 duration: 52
               }
             },
@@ -54,7 +54,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.trailer1,
-                alt: 'trailer1',
+                title: 'trailer1',
                 duration: 734
               }
             },
@@ -73,7 +73,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.trailer1,
-                alt: 'trailer1',
+                title: 'trailer1',
                 duration: 734
               }
             },
@@ -85,7 +85,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -97,7 +97,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.trailer1,
-                alt: 'trailer1',
+                title: 'trailer1',
                 duration: 734
               }
             },
@@ -109,7 +109,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.sintelTrailer,
-                alt: 'sintelTrailer',
+                title: 'sintelTrailer',
                 duration: 52
               }
             },
@@ -121,7 +121,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -140,7 +140,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -152,7 +152,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -164,7 +164,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -176,7 +176,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -195,7 +195,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -208,7 +208,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -227,7 +227,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -239,7 +239,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },
@@ -251,7 +251,7 @@ const courseSectionsSeeder = () => {
               lectureContentType: "VIDEO",
               video: {
                 url: videoSources.bunnyMovie,
-                alt: 'bunnyMovie',
+                title: 'bunnyMovie',
                 duration: 33
               }
             },

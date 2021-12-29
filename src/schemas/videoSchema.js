@@ -4,8 +4,8 @@ const Schema = mongoose.Schema
 
 const VideoSchema = new Schema({
   url: { type: String, default: '' },
-  alt: { type: String, default: '' },
   duration: { type: Number, default: 0 },
+  title: { type: String, default: '' },
   isDeleted: { type: Boolean, default: false }
 }, {
   timestamps: true,
@@ -15,6 +15,7 @@ const VideoSchema = new Schema({
       delete obj.__v
       return obj
     }
-  }})
+  }
+})
 
 module.exports = mongoose.model('videos', VideoSchema)
