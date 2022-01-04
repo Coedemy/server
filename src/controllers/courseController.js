@@ -315,8 +315,14 @@ const createSection = async (req, res, next) => {
   res.status(201).json({ newSection })
 }
 
-const deleteSection = async (req, res, next) => {
-
+const removeSection = async (req, res, next) => {
+  const { courseId, sectionId } = req.params
+  const updatedCourse = await Course.findOneAndUpdate(
+    { _id: courseId },
+    { $pull: { sections: sectionId } },
+    { new: true }
+  )
+  res.status(200).json({ courseId, sectionId })
 }
 
 const updateSectionContent = async (req, res, next) => {
@@ -349,13 +355,24 @@ const createLecture = async (req, res, next) => {
   res.status(201).json({ newLecture, section })
 }
 
-const deleteLecture = async (req, res, next) => {
+const removeLecture = async (req, res, next) => {
+  const { sectionId, lectureId } = req.params
 
+  const updatedSection = await CourseSection.findOneAndUpdate(
+    { _id: sectionId },
+    { $pull: { lectures: lectureId } },
+    { new: true }
+  )
+
+  console.log({ sectionId, lectureId })
+
+  console.log({ updatedSection })
+  res.status(200).json({ sectionId, lectureId })
 }
 
 const updateLectureContent = async (req, res, next) => {
   const { lectureId } = req.params
-  const { title, canPreview, contentType, resourceType, resourceContent } = req.body
+  const { title, canPreview, contentType, resourceType, resourceUrl, resourceTitle } = req.body
   const { contentFile, resourceFile } = req.files
 
   const lecture = await Lecture.findById(lectureId)
@@ -404,8 +421,8 @@ const updateLectureContent = async (req, res, next) => {
       { _id: lecture.resource },
       {
         lectureResourceType: 'EXTERNAL_RESOURCE',
-        title: resourceContent.title,
-        resourceUrl: resourceContent.url
+        title: resourceTitle,
+        resourceUrl
       },
       { new: true }
     )
@@ -439,6 +456,6 @@ module.exports = {
   getHighRatingCoursesList, getBestSellerCoursesList, getAllCourseLectures,
   getCourseDetail, searchCourses, reviewCourse, addCourseToCart, removeCourseFromCart,
   createCourse, updateCourse, removeCourse, importManyCourses, importManyCategories,
-  createSection, deleteSection, updateSectionContent, updateSectionsOrder, togglePublishCourse,
-  createLecture, deleteLecture, updateLectureContent, updateLecturesOrder, getCourseSections
+  createSection, removeSection, updateSectionContent, updateSectionsOrder, togglePublishCourse,
+  createLecture, removeLecture, updateLectureContent, updateLecturesOrder, getCourseSections
 }

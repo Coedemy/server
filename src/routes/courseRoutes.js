@@ -49,6 +49,10 @@ router.post('/:id/remove-from-cart', requireAuth, courseController.removeCourseF
 
 router.patch('/:id', requireAuth, uploadMultipleFiles(['courseImage', 'promotionVideo']), courseController.updateCourse)
 
+router.delete('/:courseId/sections/:sectionId', courseController.removeSection)
+
+router.delete('/sections/:sectionId/lectures/:lectureId', courseController.removeLecture)
+
 router.delete('/:id', requireAuth, courseController.removeCourse)
 
 module.exports = router
