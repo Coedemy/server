@@ -1,15 +1,10 @@
+up:
+	docker-compose up -d
 
-setup:
-	@echo "========== Start installing dependencies =========="
-
-	docker build -t "express_server" .
-	
-	@echo "========== Environment is ready! App is running! =========="
-
-start:
-	@echo "========== Start running app =========="
-
-	docker-compose up
-cleanup:
+down:
 	docker-compose down
+
+cleanup:
+	docker rm $(docker ps -a -q)
+	docker rm $(docker ps -a -q)
 	docker rmi -f $$(docker images -a -q)
